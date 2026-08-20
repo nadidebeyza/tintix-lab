@@ -1,4 +1,4 @@
-"""Font loading with graceful fallbacks for editorial typography."""
+"""Load Foda Display for all @tintix.lab typography."""
 
 from __future__ import annotations
 
@@ -8,46 +8,37 @@ from PIL import ImageFont
 
 FONTS_DIR = Path(__file__).parent / "fonts"
 
-# macOS system font candidates
-SANS_LIGHT_CANDIDATES = [
-    FONTS_DIR / "Inter-Light.ttf",
-    "/System/Library/Fonts/Supplemental/Arial.ttf",
-    "/Library/Fonts/Arial.ttf",
-    "/System/Library/Fonts/Helvetica.ttc",
-]
-
-SERIF_BOLD_CANDIDATES = [
-    FONTS_DIR / "PlayfairDisplay-Bold.ttf",
-    "/System/Library/Fonts/Supplemental/Georgia Bold.ttf",
-    "/Library/Fonts/Georgia Bold.ttf",
-    "/System/Library/Fonts/Supplemental/Georgia.ttf",
-]
-
-SANS_REGULAR_CANDIDATES = [
-    FONTS_DIR / "Inter-Regular.ttf",
-    "/System/Library/Fonts/Supplemental/Arial.ttf",
-    "/Library/Fonts/Arial.ttf",
+FODA_DISPLAY_CANDIDATES = [
+    FONTS_DIR / "FodaDisplay-Regular.otf",
+    FONTS_DIR / "FodaDisplay-Regular.ttf",
+    FONTS_DIR / "Foda Display Regular.otf",
+    FONTS_DIR / "Foda Display Regular.ttf",
+    FONTS_DIR / "FodaDisplay.otf",
+    FONTS_DIR / "FodaDisplay.ttf",
+    FONTS_DIR / "Foda-Display.otf",
+    FONTS_DIR / "Foda-Display.ttf",
 ]
 
 
-def _load_first_available(candidates: list, size: int) -> ImageFont.FreeTypeFont | ImageFont.ImageFont:
-    for path in candidates:
-        p = Path(path)
-        if p.exists():
+def _foda_candidates() -> list[Path]:
+    found: list[Path] = []
+    if FONTS_DIR.exists():
+        for path in sorted(FONTS_DIR.iterdir()):
+            if path.suffix.lower() in {".otf", ".ttf"} and "foda" in path.name.lower():
+                found.append(path)
+    for path in FODA_DISPLAY_CANDIDATES:
+        if path not in found:
+            found.append(path)
+    return found
+
+
+def load_font(size: int) -> ImageFont.FreeTypeFont | ImageFont.ImageFont:
+    for path in _foda_candidates():
+        if path.exists():
             try:
-                return ImageFont.truetype(str(p), size=size)
+                return ImageFont.truetype(str(path), size=size)
             except OSError:
                 continue
-    return ImageFont.load_default()
-
-
-def load_sans_light(size: int) -> ImageFont.FreeTypeFont | ImageFont.ImageFont:
-    return _load_first_available(SANS_LIGHT_CANDIDATES, size)
-
-
-def load_sans_regular(size: int) -> ImageFont.FreeTypeFont | ImageFont.ImageFont:
-    return _load_first_available(SANS_REGULAR_CANDIDATES, size)
-
-
-def load_serif_bold(size: int) -> ImageFont.FreeTypeFont | ImageFont.ImageFont:
-    return _load_first_available(SERIF_BOLD_CANDIDATES, size)
+    raise FileNotFoundError(
+        "Foda Display font not found. Place the licensed .otf or .ttf file in the fonts/ folder."
+    )

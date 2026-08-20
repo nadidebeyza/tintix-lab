@@ -89,7 +89,9 @@ def publish_to_instagram(
     publish_story: bool = True,
 ) -> dict[str, str]:
     from image_host import get_public_image_url
+    from instagram_setup import verify_instagram_setup
 
+    verify_instagram_setup()
     client = InstagramClient()
     results: dict[str, str] = {}
 
