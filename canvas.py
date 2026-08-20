@@ -13,7 +13,7 @@ from colors import (
     parse_hex,
     text_color_for_background,
 )
-from fonts_loader import load_font
+from fonts_loader import load_arial_font, load_bold_font, load_font
 from gemini_client import Band, Palette
 
 
@@ -42,11 +42,61 @@ def draw_centered_text(
     center_y: int,
     font,
     fill: tuple[int, int, int],
+    stroke_width: int = 0,
 ) -> None:
-    bbox = draw.textbbox((0, 0), text, font=font)
+    bbox = draw.textbbox((0, 0), text, font=font, stroke_width=stroke_width)
     text_w = bbox[2] - bbox[0]
     text_h = bbox[3] - bbox[1]
-    draw.text((center_x - text_w // 2, center_y - text_h // 2), text, font=font, fill=fill)
+    draw.text(
+        (center_x - text_w // 2, center_y - text_h // 2),
+        text,
+        font=font,
+        fill=fill,
+        stroke_width=stroke_width,
+        stroke_fill=fill,
+    )
+
+
+def _text_width_with_tracking(
+    draw: ImageDraw.ImageDraw,
+    text: str,
+    font,
+    tracking: int,
+    stroke_width: int = 0,
+) -> int:
+    if not text:
+        return 0
+    width = 0
+    for i, char in enumerate(text):
+        bbox = draw.textbbox((0, 0), char, font=font, stroke_width=stroke_width)
+        width += bbox[2] - bbox[0]
+        if i < len(text) - 1:
+            width += tracking
+    return width
+
+
+def _draw_text_with_tracking(
+    draw: ImageDraw.ImageDraw,
+    text: str,
+    x: int,
+    y: int,
+    font,
+    fill: tuple[int, int, int],
+    tracking: int,
+    stroke_width: int = 0,
+) -> None:
+    cursor_x = x
+    for i, char in enumerate(text):
+        bbox = draw.textbbox((0, 0), char, font=font, stroke_width=stroke_width)
+        draw.text(
+            (cursor_x, y),
+            char,
+            font=font,
+            fill=fill,
+            stroke_width=stroke_width,
+            stroke_fill=fill,
+        )
+        cursor_x += (bbox[2] - bbox[0]) + (tracking if i < len(text) - 1 else 0)
 
 
 def draw_band_content(
@@ -64,29 +114,27 @@ def draw_band_content(
     title_color = text_color_for_background(bg_hex)
     hex_color = muted_text_color_for_background(bg_hex)
 
-    title_font = load_font(title_size)
-    hex_font = load_font(hex_size)
+    title_font = load_bold_font(title_size)
+    hex_font = load_arial_font(hex_size)
+    hex_text = f"HEX: {bg_hex.lower()}"
 
     title_bbox = draw.textbbox((0, 0), band.name, font=title_font)
-    title_h = title_bbox[3] - title_bbox[1]
-    gap = int(hex_size * 0.6)
+    hex_bbox = draw.textbbox((0, 0), hex_text, font=hex_font)
 
-    draw_centered_text(
-        draw,
-        band.name,
-        center_x,
-        center_y - gap - title_h // 2,
-        title_font,
-        title_color,
-    )
-    draw_centered_text(
-        draw,
-        f"HEX: {bg_hex.lower()}",
-        center_x,
-        center_y + gap + hex_size // 2,
-        hex_font,
-        hex_color,
-    )
+    title_h = title_bbox[3] - title_bbox[1]
+    hex_h = hex_bbox[3] - hex_bbox[1]
+    gap = int(hex_size * config.NAME_HEX_GAP_RATIO)
+
+    block_h = title_h + gap + hex_h
+    block_top = center_y - block_h // 2
+
+    title_x = center_x - (title_bbox[2] - title_bbox[0]) // 2
+    title_y = block_top - title_bbox[1]
+    draw.text((title_x, title_y), band.name, font=title_font, fill=title_color)
+
+    hex_x = center_x - (hex_bbox[2] - hex_bbox[0]) // 2
+    hex_y = block_top + title_h + gap - hex_bbox[1]
+    draw.text((hex_x, hex_y), hex_text, font=hex_font, fill=hex_color)
 
 
 def draw_top_header(
@@ -94,7 +142,6 @@ def draw_top_header(
     palette: Palette,
     size: tuple[int, int],
     rects: list[tuple[int, int, int, int]],
-    header_left: str | None = None,
 ) -> None:
     width, height = size
     edge_pad = int(width * config.EDGE_PADDING_RATIO)
@@ -102,21 +149,27 @@ def draw_top_header(
     header_size = max(14, int(height * config.HEADER_FONT_RATIO))
     header_font = load_font(header_size)
     header_color = text_color_for_background(normalize_hex(palette.bands[0].hex))
-    left_header = header_left or config.HEADER_LEFT
+    tracking = max(1, int(header_size * config.BRAND_HANDLE_TRACKING_RATIO))
+    stroke_width = 1
 
-    draw.text(
-        (edge_pad, rects[0][1] + header_offset),
-        left_header,
-        font=header_font,
-        fill=header_color,
-    )
-    handle_bbox = draw.textbbox((0, 0), config.BRAND_HANDLE, font=header_font)
-    handle_w = handle_bbox[2] - handle_bbox[0]
-    draw.text(
-        (width - edge_pad - handle_w, rects[0][1] + header_offset),
+    handle_w = _text_width_with_tracking(
+        draw,
         config.BRAND_HANDLE,
-        font=header_font,
-        fill=header_color,
+        header_font,
+        tracking,
+        stroke_width=stroke_width,
+    )
+    handle_x = width - edge_pad - handle_w
+    handle_y = rects[0][1] + header_offset
+    _draw_text_with_tracking(
+        draw,
+        config.BRAND_HANDLE,
+        handle_x,
+        handle_y,
+        header_font,
+        header_color,
+        tracking,
+        stroke_width=stroke_width,
     )
 
 

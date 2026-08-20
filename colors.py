@@ -38,16 +38,36 @@ def relative_luminance(rgb: RGB) -> float:
     return 0.2126 * channel(r) + 0.7152 * channel(g) + 0.0722 * channel(b)
 
 
+def _mix(a: RGB, b: RGB, t: float) -> RGB:
+    return (
+        int(a[0] * (1 - t) + b[0] * t),
+        int(a[1] * (1 - t) + b[1] * t),
+        int(a[2] * (1 - t) + b[2] * t),
+    )
+
+
+def _band_tinted_dark_text(rgb: RGB, strength: float = 0.32) -> RGB:
+    """Derive a readable dark text color that keeps each band's hue."""
+    espresso = (42, 32, 30)
+    band_dark = (
+        max(18, int(rgb[0] * strength)),
+        max(16, int(rgb[1] * strength)),
+        max(14, int(rgb[2] * strength)),
+    )
+    return _mix(espresso, band_dark, 0.55)
+
+
 def text_color_for_background(hex_color: str) -> RGB:
     """
     Pick editorial text color with strong contrast against the band background.
-    Light pastels → deep espresso brown; dark tones → warm off-white.
+    Light pastels → band-tinted deep brown; dark tones → warm off-white.
     """
-    lum = relative_luminance(parse_hex(hex_color))
+    rgb = parse_hex(hex_color)
+    lum = relative_luminance(rgb)
     if lum > 0.55:
-        return (42, 32, 30)  # espresso brown
+        return _band_tinted_dark_text(rgb, strength=0.30)
     if lum > 0.35:
-        return (58, 46, 42)
+        return _band_tinted_dark_text(rgb, strength=0.38)
     return (245, 240, 235)  # warm off-white
 
 

@@ -20,11 +20,11 @@ from instagram_client import publish_to_instagram
 SIZE = config.POST_SIZE
 
 
-def render_post(palette: Palette, header_left: str | None = None) -> Image.Image:
+def render_post(palette: Palette) -> Image.Image:
     """Render a 1080×1080 Instagram Post palette card."""
     _, height = SIZE
     image, draw, rects = canvas.new_band_canvas(palette, SIZE)
-    canvas.draw_top_header(draw, palette, SIZE, rects, header_left=header_left)
+    canvas.draw_top_header(draw, palette, SIZE, rects)
 
     title_size = max(28, int(height * config.TITLE_FONT_RATIO))
     hex_size = max(14, int(height * config.HEX_FONT_RATIO))
