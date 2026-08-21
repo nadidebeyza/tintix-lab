@@ -26,15 +26,7 @@ OUTPUT_POST = config.BASE_DIR / "final_post.png"
 
 
 def render_post(palette: Palette) -> Path:
-    _, height = config.POST_SIZE
-    image, draw, rects = canvas.new_band_canvas(palette, config.POST_SIZE)
-    canvas.draw_top_header(draw, palette, config.POST_SIZE, rects)
-
-    title_size = max(28, int(height * config.TITLE_FONT_RATIO))
-    hex_size = max(14, int(height * config.HEX_FONT_RATIO))
-    for band, rect in zip(palette.bands, rects):
-        canvas.draw_band_content(draw, band, rect, title_size, hex_size)
-
+    image = canvas.render_palette_card(palette, config.POST_SIZE)
     return canvas.save_image(image, OUTPUT_POST)
 
 

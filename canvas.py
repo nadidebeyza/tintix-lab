@@ -99,6 +99,14 @@ def _draw_text_with_tracking(
         cursor_x += (bbox[2] - bbox[0]) + (tracking if i < len(text) - 1 else 0)
 
 
+def band_typography(height: int) -> tuple[int, int, int]:
+    """Return title, hex, and header font sizes for a canvas height."""
+    title_size = max(28, int(height * config.TITLE_FONT_RATIO))
+    hex_size = max(14, int(height * config.HEX_FONT_RATIO))
+    header_size = max(14, int(height * config.HEADER_FONT_RATIO))
+    return title_size, hex_size, header_size
+
+
 def draw_band_content(
     draw: ImageDraw.ImageDraw,
     band: Band,
@@ -177,3 +185,14 @@ def save_image(image: Image.Image, output_path: Path) -> Path:
     output_path.parent.mkdir(parents=True, exist_ok=True)
     image.save(output_path, format="PNG", optimize=True)
     return output_path
+
+
+def render_palette_card(palette: Palette, size: tuple[int, int]) -> Image.Image:
+    """Render a full palette card with header and all band content."""
+    _, height = size
+    image, draw, rects = new_band_canvas(palette, size)
+    draw_top_header(draw, palette, size, rects)
+    title_size, hex_size, _header_size = band_typography(height)
+    for band, rect in zip(palette.bands, rects):
+        draw_band_content(draw, band, rect, title_size, hex_size)
+    return image
