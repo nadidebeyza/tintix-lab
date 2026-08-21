@@ -1,111 +1,77 @@
 #!/usr/bin/env python3
-"""Instagram Story (1080×1920) generator for @tintix.lab."""
+"""
+@tintix.lab — Instagram Story automation pipeline.
+
+Generates palette via Gemini, renders 1080×1920 card, hosts publicly,
+and publishes to Instagram. Tracks last 30 story palettes in story_history.json.
+"""
 
 from __future__ import annotations
 
-import argparse
 import sys
-import tempfile
-from datetime import datetime
 from pathlib import Path
 
 from dotenv import load_dotenv
-from PIL import Image
 
 import canvas
 import config
-from gemini_client import Palette, sample_palette
-from instagram_client import publish_to_instagram
-from palette_pool import advance_after_publish, get_next_palette
+from gemini_client import Palette, generate_palette, sample_palette
+from image_host import get_public_image_url
+from instagram_client import InstagramClient
+from instagram_setup import verify_instagram_setup
+from main import _print_palette, build_parser
+from palette_history import record_published_palette
 
-SIZE = config.STORY_SIZE
+OUTPUT_STORY = config.BASE_DIR / "final_story.png"
 
 
-def render_story(palette: Palette) -> Image.Image:
-    """Render a 1080×1920 Instagram Story palette card."""
-    _, height = SIZE
-    image, draw, rects = canvas.new_band_canvas(palette, SIZE)
-    canvas.draw_top_header(draw, palette, SIZE, rects)
+def render_story(palette: Palette) -> Path:
+    _, height = config.STORY_SIZE
+    image, draw, rects = canvas.new_band_canvas(palette, config.STORY_SIZE)
+    canvas.draw_top_header(draw, palette, config.STORY_SIZE, rects)
 
     title_size = max(28, int(height * config.TITLE_FONT_RATIO))
     hex_size = max(14, int(height * config.HEX_FONT_RATIO))
     for band, rect in zip(palette.bands, rects):
         canvas.draw_band_content(draw, band, rect, title_size, hex_size)
 
-    return image
+    return canvas.save_image(image, OUTPUT_STORY)
 
 
-def generate_story(
-    palette: Palette,
-    output_dir: Path | str,
-    filename: str | None = None,
-) -> Path:
-    """Render and save an Instagram Story palette card."""
-    name = filename or f"story_{datetime.now():%Y%m%d_%H%M%S}.png"
-    return canvas.save_image(render_story(palette), Path(output_dir) / name)
+def run_story_pipeline(*, sample: bool = False, model: str | None = None) -> None:
+    verify_instagram_setup()
 
+    if sample:
+        palette = sample_palette()
+    else:
+        palette = generate_palette("story", model=model)
 
-def build_parser() -> argparse.ArgumentParser:
-    parser = argparse.ArgumentParser(
-        description="Generate and publish an @tintix.lab Instagram Story.",
-    )
-    parser.add_argument(
-        "--sample",
-        action="store_true",
-        help="Use built-in sample palette (no Gemini API call)",
-    )
-    parser.add_argument(
-        "--model",
-        default=None,
-        help="Gemini model override (default: auto fallback chain)",
-    )
-    return parser
+    _print_palette(palette)
+    image_path = render_story(palette)
+    print(f"Generated story: {image_path.name}")
+
+    public_url = get_public_image_url(image_path)
+    client = InstagramClient()
+    media_id = client.publish_story(public_url)
+    print(f"Published story: media_id={media_id}")
+
+    if not sample:
+        record_published_palette("story", palette)
 
 
 def main(argv: list[str] | None = None) -> int:
     load_dotenv()
     args = build_parser().parse_args(argv)
-
     try:
-        if args.sample:
-            palette = sample_palette()
-            palette_index = None
-        else:
-            palette, palette_index, _cycle = get_next_palette("story")
+        run_story_pipeline(sample=args.sample, model=args.model)
+        return 0
     except EnvironmentError as exc:
         print(f"Error: {exc}", file=sys.stderr)
         print("Tip: run with --sample to test locally without an API key.", file=sys.stderr)
         return 1
     except Exception as exc:
-        print(f"Failed to load palette: {exc}", file=sys.stderr)
+        print(f"Story pipeline failed: {exc}", file=sys.stderr)
         return 1
-
-    print(f"Theme: {palette.theme}")
-    for i, band in enumerate(palette.bands, 1):
-        print(f"  Band {i}: {band.name} — {band.hex}")
-    print(f"\nCaption:\n{palette.caption}\n")
-
-    with tempfile.TemporaryDirectory(prefix="tintix-story-") as tmp:
-        story_path = generate_story(palette, Path(tmp))
-        print(f"Generated story: {story_path.name}")
-
-        try:
-            results = publish_to_instagram(
-                post_path=None,
-                story_path=story_path,
-                caption=palette.caption,
-                publish_post=False,
-                publish_story=True,
-            )
-            for kind, media_id in results.items():
-                print(f"Published {kind}: media_id={media_id}")
-            if palette_index is not None:
-                advance_after_publish("story", palette_index)
-        except Exception as exc:
-            print(f"Instagram publish failed: {exc}", file=sys.stderr)
-            return 1
-
-    return 0
 
 
 if __name__ == "__main__":

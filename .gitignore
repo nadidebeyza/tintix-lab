@@ -1,4 +1,6 @@
 output/
+final_post.png
+final_story.png
 .env
 __pycache__/
 *.pyc

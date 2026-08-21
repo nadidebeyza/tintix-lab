@@ -7,9 +7,9 @@ import os
 import re
 import time
 from dataclasses import dataclass
-from typing import Any
+from typing import Any, Literal
 
-GEMINI_PROMPT = """
+GEMINI_PROMPT_BASE = """
 You are a Gen-Z fashion color theorist and stylist for the Instagram page @tintix.lab.
 Your task is to create a trendy, aesthetic 3-color palette that girls aged 16-25 can use for outfit styling, makeup, or room aesthetics.
 
@@ -36,7 +36,11 @@ Return ONLY a valid JSON object with no markdown backticks:
 Rules:
 1. 'name' must be short, all-lowercase (1-2 words max, e.g., 'powder', 'butter', 'chocopie', 'lacté', 'matcha', 'espresso').
 2. Color hexes must harmonize beautifully (e.g., 2 soft pastel/muted tones + 1 rich grounding tone).
+3. NEVER repeat any palette listed in the "Recently published — DO NOT REUSE" section.
 """
+
+Format = Literal["story", "post"]
+DUPLICATE_RETRIES = int(os.getenv("DUPLICATE_PALETTE_RETRIES", "5"))
 
 # Tried in order; each model has its own free-tier quota bucket.
 MODEL_FALLBACKS = (
@@ -110,36 +114,34 @@ def _is_retryable(error: Exception) -> bool:
     )
 
 
-def _call_model(client, model: str) -> Palette:
-    response = client.models.generate_content(model=model, contents=GEMINI_PROMPT)
+def _call_model(client, model: str, prompt: str) -> Palette:
+    response = client.models.generate_content(model=model, contents=prompt)
     data = _extract_json(response.text)
     return _normalize_palette(data)
 
 
-def generate_palette(
-    api_key: str | None = None,
-    model: str | None = None,
-) -> Palette:
-    """Call Gemini and return a validated palette with model fallbacks."""
-    key = api_key or os.getenv("GEMINI_API_KEY")
-    if not key:
-        raise EnvironmentError(
-            "GEMINI_API_KEY is not set. Add it to your environment or .env file."
+def build_gemini_prompt(
+    kind: Format,
+    history: list[dict[str, str]],
+    *,
+    duplicate_retry: bool = False,
+) -> str:
+    from palette_history import format_history_for_prompt
+
+    prompt = GEMINI_PROMPT_BASE + format_history_for_prompt(kind, history)
+    if duplicate_retry:
+        prompt += (
+            "\nYour previous answer duplicated a banned palette. "
+            "Generate something entirely new — different theme and different hex codes."
         )
+    return prompt
 
-    from google import genai
 
-    client = genai.Client(api_key=key)
-    preferred = model or os.getenv("GEMINI_MODEL")
-    models = [preferred] if preferred else list(MODEL_FALLBACKS)
-    for fallback in MODEL_FALLBACKS:
-        if fallback not in models:
-            models.append(fallback)
-
+def _generate_once(client, models: list[str], prompt: str) -> Palette:
     errors: list[str] = []
     for candidate in models:
         try:
-            palette = _call_model(client, candidate)
+            palette = _call_model(client, candidate, prompt)
             if candidate != models[0]:
                 print(f"Note: used fallback model '{candidate}' (primary quota unavailable).")
             return palette
@@ -150,17 +152,64 @@ def generate_palette(
                     print(f"Rate limited on {candidate}, retrying in {delay}s...")
                     time.sleep(delay)
                     try:
-                        return _call_model(client, candidate)
+                        return _call_model(client, candidate, prompt)
                     except Exception as retry_exc:
                         errors.append(f"{candidate}: {retry_exc}")
                         continue
                 errors.append(f"{candidate}: {exc}")
                 continue
             raise
-
     raise RuntimeError(
         "All Gemini models failed (quota or rate limit). "
         f"Details: {' | '.join(errors)}"
+    )
+
+
+def generate_palette(
+    kind: Format = "post",
+    api_key: str | None = None,
+    model: str | None = None,
+    history: list[dict[str, str]] | None = None,
+) -> Palette:
+    """Call Gemini and return a palette not in recent history."""
+    from palette_history import HISTORY_SIZE, is_duplicate_palette, load_history
+
+    key = api_key or os.getenv("GEMINI_API_KEY")
+    if not key:
+        raise EnvironmentError(
+            "GEMINI_API_KEY is not set. Add it to your environment or .env file."
+        )
+
+    from google import genai
+
+    recent = history if history is not None else load_history(kind)
+    if recent:
+        print(f"Avoiding {len(recent)} recent {kind} palettes from history (max {HISTORY_SIZE})")
+
+    client = genai.Client(api_key=key)
+    preferred = model or os.getenv("GEMINI_MODEL")
+    models = [preferred] if preferred else list(MODEL_FALLBACKS)
+    for fallback in MODEL_FALLBACKS:
+        if fallback not in models:
+            models.append(fallback)
+
+    for duplicate_attempt in range(1, DUPLICATE_RETRIES + 1):
+        prompt = build_gemini_prompt(
+            kind,
+            recent,
+            duplicate_retry=duplicate_attempt > 1,
+        )
+        palette = _generate_once(client, models, prompt)
+        if not is_duplicate_palette(palette, recent):
+            return palette
+        print(
+            f"Duplicate blocked: {palette.theme} — regenerating "
+            f"({duplicate_attempt}/{DUPLICATE_RETRIES})"
+        )
+
+    raise RuntimeError(
+        f"Could not generate a unique {kind} palette after {DUPLICATE_RETRIES} attempts. "
+        "Review story_history.json / post_history.json or increase DUPLICATE_PALETTE_RETRIES."
     )
 
 

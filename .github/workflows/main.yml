@@ -1,40 +1,33 @@
-name: Daily Instagram Automation
+name: Daily Instagram Automation (Post & Story)
 
 on:
   schedule:
-    - cron: "0 10 * * *"
-      timezone: Europe/Istanbul
-    - cron: "0 20 * * *"
-      timezone: Europe/Istanbul
+    # UTC 07:00 = Türkiye 10:00 -> Story
+    - cron: "0 7 * * *"
+    # UTC 17:00 = Türkiye 20:00 -> Feed Post
+    - cron: "0 17 * * *"
   workflow_dispatch:
-    inputs:
-      format:
-        description: Publish story or post
-        required: true
-        default: post
-        type: choice
-        options:
-          - story
-          - post
-
-permissions:
-  contents: write
 
 concurrency:
-  group: instagram-${{ github.event.schedule || github.event.inputs.format }}
+  group: tintix-lab-${{ github.ref_name }}
   cancel-in-progress: false
 
 jobs:
-  story:
-    if: >-
-      (github.event_name == 'workflow_dispatch' && github.event.inputs.format == 'story') ||
-      (github.event_name == 'schedule' && github.event.schedule == '0 10 * * *')
+  run-story:
+    if: github.event.schedule == '0 7 * * *' || github.event_name == 'workflow_dispatch'
     runs-on: ubuntu-latest
     timeout-minutes: 15
 
     steps:
-      - name: Checkout
+      - name: Checkout repository
         uses: actions/checkout@v4
+
+      - name: Restore story history cache
+        uses: actions/cache@v4
+        with:
+          path: story_history.json
+          key: story-history-${{ github.ref_name }}
+          save-always: true
 
       - name: Set up Python
         uses: actions/setup-python@v5
@@ -45,31 +38,28 @@ jobs:
       - name: Install dependencies
         run: pip install -r requirements.txt
 
-      - name: Run Instagram Automation Script
+      - name: Run Story Automation
         env:
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
           INSTAGRAM_ACCOUNT_ID: ${{ secrets.INSTAGRAM_ACCOUNT_ID }}
           INSTAGRAM_ACCESS_TOKEN: ${{ secrets.INSTAGRAM_ACCESS_TOKEN }}
-        run: python main.py story
+        run: python story.py
 
-      - name: Save palette rotation state
-        run: |
-          git config user.name "github-actions[bot]"
-          git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add data/state.json
-          git diff --staged --quiet || git commit -m "chore: advance story palette rotation"
-          git push
-
-  post:
-    if: >-
-      (github.event_name == 'workflow_dispatch' && github.event.inputs.format == 'post') ||
-      (github.event_name == 'schedule' && github.event.schedule == '0 20 * * *')
+  run-post:
+    if: github.event.schedule == '0 17 * * *' || github.event_name == 'workflow_dispatch'
     runs-on: ubuntu-latest
     timeout-minutes: 15
 
     steps:
-      - name: Checkout
+      - name: Checkout repository
         uses: actions/checkout@v4
+
+      - name: Restore post history cache
+        uses: actions/cache@v4
+        with:
+          path: post_history.json
+          key: post-history-${{ github.ref_name }}
+          save-always: true
 
       - name: Set up Python
         uses: actions/setup-python@v5
@@ -80,17 +70,9 @@ jobs:
       - name: Install dependencies
         run: pip install -r requirements.txt
 
-      - name: Run Instagram Automation Script
+      - name: Run Main Post Automation
         env:
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
           INSTAGRAM_ACCOUNT_ID: ${{ secrets.INSTAGRAM_ACCOUNT_ID }}
           INSTAGRAM_ACCESS_TOKEN: ${{ secrets.INSTAGRAM_ACCESS_TOKEN }}
-        run: python main.py post
-
-      - name: Save palette rotation state
-        run: |
-          git config user.name "github-actions[bot]"
-          git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add data/state.json
-          git diff --staged --quiet || git commit -m "chore: advance post palette rotation"
-          git push
+        run: python main.py
