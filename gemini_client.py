@@ -37,6 +37,7 @@ Rules:
 1. 'name' must be short, all-lowercase (1-2 words max, e.g., 'powder', 'butter', 'chocopie', 'lacté', 'matcha', 'espresso').
 2. Color hexes must harmonize beautifully (e.g., 2 soft pastel/muted tones + 1 rich grounding tone).
 3. NEVER repeat any palette listed in the "Recently published — DO NOT REUSE" section.
+4. caption sentences must start with an uppercase letter (sentence case for prose; hashtags stay lowercase).
 """
 
 Format = Literal["story", "post"]
@@ -74,6 +75,33 @@ def _extract_json(raw: str) -> dict[str, Any]:
     return json.loads(text)
 
 
+def _capitalize_sentence_start(text: str) -> str:
+    for index, char in enumerate(text):
+        if char.isalpha():
+            return text[:index] + char.upper() + text[index + 1 :]
+    return text
+
+
+def _capitalize_caption_sentences(caption: str) -> str:
+    """Ensure each caption sentence starts with an uppercase letter."""
+    text = caption.strip()
+    if not text:
+        return text
+
+    def fix_line(line: str) -> str:
+        line = line.strip()
+        if not line or line.startswith("#"):
+            return line
+        sentences = re.split(r"(?<=[.!?])\s+", line)
+        return " ".join(_capitalize_sentence_start(sentence.strip()) for sentence in sentences if sentence.strip())
+
+    paragraphs = re.split(r"\n\s*\n", text)
+    return "\n\n".join(
+        "\n".join(fix_line(line) for line in paragraph.split("\n"))
+        for paragraph in paragraphs
+    )
+
+
 def _normalize_palette(data: dict[str, Any]) -> Palette:
     theme = data.get("theme") or data.get("palette_name") or "Untitled Palette"
     bands_raw = data.get("bands") or []
@@ -84,7 +112,7 @@ def _normalize_palette(data: dict[str, Any]) -> Palette:
         Band(name=str(item["name"]).lower(), hex=str(item["hex"]))
         for item in bands_raw
     ]
-    caption = str(data.get("caption", "")).strip()
+    caption = _capitalize_caption_sentences(str(data.get("caption", "")).strip())
     return Palette(theme=theme, bands=bands, caption=caption)
 
 
@@ -243,7 +271,7 @@ def sample_palette() -> Palette:
             Band(name="milk tea", hex="#d8c4b6"),
             Band(name="chocopie", hex="#432f2e"),
         ],
-        caption=(
+        caption=_capitalize_caption_sentences(
             "Save this palette for your next coffee date outfit ☕️✨ "
             "#tintixlab #outfitideas #colorpalette #genzfashion"
         ),
