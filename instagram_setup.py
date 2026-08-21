@@ -7,26 +7,90 @@ import os
 import requests
 
 GRAPH_VERSION = "v21.0"
-BASE_URL = f"https://graph.facebook.com/{GRAPH_VERSION}"
-
-REQUIRED_SCOPES = frozenset(
-    {
-        "instagram_basic",
-        "instagram_content_publish",
-        "pages_read_engagement",
-        "pages_show_list",
-    }
-)
+FACEBOOK_GRAPH_BASE = f"https://graph.facebook.com/{GRAPH_VERSION}"
+INSTAGRAM_LOGIN_API_VERSION = os.getenv("INSTAGRAM_LOGIN_API_VERSION", "v23.0")
+INSTAGRAM_LOGIN_API_BASE = f"https://graph.instagram.com/{INSTAGRAM_LOGIN_API_VERSION}"
 
 
-def _debug_token(access_token: str) -> dict:
+def _clean(value: str | None) -> str:
+    return (value or "").strip()
+
+
+def _uses_instagram_login_api(token: str) -> bool:
+    return token.startswith(("IGAA", "IGQ", "IGQV"))
+
+
+def _graph_error_message(response: requests.Response) -> str:
+    try:
+        payload = response.json()
+    except ValueError:
+        payload = {}
+    error = payload.get("error") or {}
+    message = error.get("message") or response.text or response.reason
+    code = error.get("code")
+    subcode = error.get("error_subcode")
+    parts = [message]
+    if code is not None:
+        parts.append(f"code={code}")
+    if subcode is not None:
+        parts.append(f"subcode={subcode}")
+    return " ".join(parts)
+
+
+def _verify_facebook_login_token(token: str, ig_id: str) -> str:
+    if not ig_id.isdigit():
+        raise RuntimeError(
+            f"INSTAGRAM_ACCOUNT_ID must be a numeric Instagram Business Account ID, "
+            f"not '{ig_id}'."
+        )
+
     response = requests.get(
-        f"{BASE_URL}/debug_token",
-        params={"input_token": access_token, "access_token": access_token},
+        f"{FACEBOOK_GRAPH_BASE}/{ig_id}",
+        params={"fields": "username,name", "access_token": token},
         timeout=30,
     )
+    if response.ok:
+        username = response.json().get("username", "?")
+        return username
+
+    detail = _graph_error_message(response)
+    if response.status_code in {400, 401, 403}:
+        raise RuntimeError(
+            "Instagram access token is invalid, expired, or missing publish permissions.\n"
+            f"API response: {detail}\n"
+            "Fix in Meta for Developers → Graph API Explorer:\n"
+            "  1. Select your App and Facebook Page\n"
+            "  2. Add permissions: instagram_basic, instagram_content_publish, "
+            "pages_read_engagement, pages_show_list\n"
+            "  3. Generate a Page Access Token (not a User token)\n"
+            "  4. Update INSTAGRAM_ACCESS_TOKEN in GitHub Secrets / .env\n"
+            "     (no spaces or trailing newlines)"
+        )
     response.raise_for_status()
-    return response.json().get("data", {})
+    return "?"
+
+
+def _verify_instagram_login_token(token: str) -> tuple[str, str]:
+    response = requests.get(
+        f"{INSTAGRAM_LOGIN_API_BASE}/me",
+        params={"fields": "id,user_id,username", "access_token": token},
+        timeout=30,
+    )
+    if not response.ok:
+        detail = _graph_error_message(response)
+        raise RuntimeError(
+            "Instagram Login access token is invalid or expired.\n"
+            f"API response: {detail}\n"
+            "Generate a fresh token in Meta for Developers and update "
+            "INSTAGRAM_ACCESS_TOKEN in GitHub Secrets / .env."
+        )
+
+    data = response.json()
+    account_id = str(data.get("user_id") or data.get("id") or "")
+    username = str(data.get("username") or "?")
+    if not account_id:
+        raise RuntimeError("Could not resolve Instagram account id from /me.")
+    return account_id, username
 
 
 def verify_instagram_setup(
@@ -34,49 +98,28 @@ def verify_instagram_setup(
     access_token: str | None = None,
 ) -> None:
     """
-    Validate token scopes and Instagram account access before publishing.
-    Raises RuntimeError with actionable steps when misconfigured.
+    Validate Instagram credentials before publishing.
+    Uses a direct Graph API call instead of debug_token, which often returns 400
+    unless an app access token is supplied.
     """
-    token = access_token or os.getenv("INSTAGRAM_ACCESS_TOKEN", "")
-    ig_id = account_id or os.getenv("INSTAGRAM_ACCOUNT_ID", "")
-    if not token or not ig_id:
+    token = _clean(access_token or os.getenv("INSTAGRAM_ACCESS_TOKEN"))
+    ig_id = _clean(account_id or os.getenv("INSTAGRAM_ACCOUNT_ID"))
+    if not token:
+        raise RuntimeError("Missing INSTAGRAM_ACCESS_TOKEN in .env or GitHub Secrets.")
+    if not _uses_instagram_login_api(token) and not ig_id:
         raise RuntimeError(
-            "Missing INSTAGRAM_ACCESS_TOKEN or INSTAGRAM_ACCOUNT_ID in .env"
+            "Missing INSTAGRAM_ACCOUNT_ID in .env or GitHub Secrets."
         )
 
-    info = _debug_token(token)
-    if not info.get("is_valid"):
-        raise RuntimeError("Instagram access token is invalid or expired.")
+    if _uses_instagram_login_api(token):
+        resolved_id, username = _verify_instagram_login_token(token)
+        if ig_id and ig_id != resolved_id:
+            print(
+                f"Warning: INSTAGRAM_ACCOUNT_ID={ig_id} does not match token account "
+                f"{resolved_id}; using token account."
+            )
+        print(f"Instagram ready: @{username} (id {resolved_id})")
+        return
 
-    granted = set(info.get("scopes") or [])
-    missing = REQUIRED_SCOPES - granted
-    if missing:
-        raise RuntimeError(
-            "Instagram token is missing required permissions: "
-            f"{', '.join(sorted(missing))}.\n"
-            "Fix in Meta for Developers → Graph API Explorer:\n"
-            "  1. Select your App and Facebook Page\n"
-            "  2. Add permissions: instagram_basic, instagram_content_publish, "
-            "pages_read_engagement, pages_show_list\n"
-            "  3. Generate a Page Access Token and update .env"
-        )
-
-    response = requests.get(
-        f"{BASE_URL}/{ig_id}",
-        params={"fields": "username,name", "access_token": token},
-        timeout=30,
-    )
-    if not response.ok:
-        page_id = info.get("profile_id") or info.get("user_id")
-        hint = (
-            f"\nToken is linked to page/user ID {page_id}. "
-            "Fetch the correct Instagram ID with:\n"
-            f"  GET /{page_id}?fields=instagram_business_account"
-        )
-        raise RuntimeError(
-            f"Cannot access Instagram account ID '{ig_id}'. "
-            f"API response: {response.text}{hint}"
-        )
-
-    username = response.json().get("username", "?")
+    username = _verify_facebook_login_token(token, ig_id)
     print(f"Instagram ready: @{username} (id {ig_id})")

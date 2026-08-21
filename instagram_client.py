@@ -18,8 +18,10 @@ class InstagramClient:
         account_id: str | None = None,
         access_token: str | None = None,
     ) -> None:
-        self.account_id = account_id or os.getenv("INSTAGRAM_ACCOUNT_ID", "")
-        self.access_token = access_token or os.getenv("INSTAGRAM_ACCESS_TOKEN", "")
+        self.account_id = (account_id or os.getenv("INSTAGRAM_ACCOUNT_ID", "")).strip()
+        self.access_token = (
+            access_token or os.getenv("INSTAGRAM_ACCESS_TOKEN", "")
+        ).strip()
         if not self.account_id or not self.access_token:
             raise EnvironmentError(
                 "INSTAGRAM_ACCOUNT_ID and INSTAGRAM_ACCESS_TOKEN must be set."
