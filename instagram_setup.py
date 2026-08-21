@@ -93,6 +93,33 @@ def _verify_instagram_login_token(token: str) -> tuple[str, str]:
     return account_id, username
 
 
+def resolve_instagram_account_id(
+    account_id: str | None = None,
+    access_token: str | None = None,
+) -> str:
+    """Return the Instagram account id used for publishing endpoints."""
+    token = _clean(access_token or os.getenv("INSTAGRAM_ACCESS_TOKEN"))
+    ig_id = _clean(account_id or os.getenv("INSTAGRAM_ACCOUNT_ID"))
+    if _uses_instagram_login_api(token):
+        resolved_id, _ = _verify_instagram_login_token(token)
+        return resolved_id
+    if not ig_id:
+        raise RuntimeError("Missing INSTAGRAM_ACCOUNT_ID in .env or GitHub Secrets.")
+    return ig_id
+
+
+def instagram_api_base(access_token: str | None = None) -> str:
+    token = _clean(access_token or os.getenv("INSTAGRAM_ACCESS_TOKEN"))
+    if _uses_instagram_login_api(token):
+        return INSTAGRAM_LOGIN_API_BASE
+    return FACEBOOK_GRAPH_BASE
+
+
+def uses_instagram_login_api(access_token: str | None = None) -> bool:
+    token = _clean(access_token or os.getenv("INSTAGRAM_ACCESS_TOKEN"))
+    return _uses_instagram_login_api(token)
+
+
 def verify_instagram_setup(
     account_id: str | None = None,
     access_token: str | None = None,
