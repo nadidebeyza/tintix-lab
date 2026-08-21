@@ -13,7 +13,7 @@ from colors import (
     parse_hex,
     text_color_for_background,
 )
-from fonts_loader import load_arial_font, load_bold_font, load_font
+from fonts_loader import load_arial_font, load_bold_font
 from gemini_client import Band, Palette
 
 
@@ -57,54 +57,11 @@ def draw_centered_text(
     )
 
 
-def _text_width_with_tracking(
-    draw: ImageDraw.ImageDraw,
-    text: str,
-    font,
-    tracking: int,
-    stroke_width: int = 0,
-) -> int:
-    if not text:
-        return 0
-    width = 0
-    for i, char in enumerate(text):
-        bbox = draw.textbbox((0, 0), char, font=font, stroke_width=stroke_width)
-        width += bbox[2] - bbox[0]
-        if i < len(text) - 1:
-            width += tracking
-    return width
-
-
-def _draw_text_with_tracking(
-    draw: ImageDraw.ImageDraw,
-    text: str,
-    x: int,
-    y: int,
-    font,
-    fill: tuple[int, int, int],
-    tracking: int,
-    stroke_width: int = 0,
-) -> None:
-    cursor_x = x
-    for i, char in enumerate(text):
-        bbox = draw.textbbox((0, 0), char, font=font, stroke_width=stroke_width)
-        draw.text(
-            (cursor_x, y),
-            char,
-            font=font,
-            fill=fill,
-            stroke_width=stroke_width,
-            stroke_fill=fill,
-        )
-        cursor_x += (bbox[2] - bbox[0]) + (tracking if i < len(text) - 1 else 0)
-
-
-def band_typography(height: int) -> tuple[int, int, int]:
-    """Return title, hex, and header font sizes for a canvas height."""
+def band_typography(height: int) -> tuple[int, int]:
+    """Return title and hex font sizes for a canvas height."""
     title_size = max(28, int(height * config.TITLE_FONT_RATIO))
     hex_size = max(14, int(height * config.HEX_FONT_RATIO))
-    header_size = max(14, int(height * config.HEADER_FONT_RATIO))
-    return title_size, hex_size, header_size
+    return title_size, hex_size
 
 
 def draw_band_content(
@@ -145,42 +102,6 @@ def draw_band_content(
     draw.text((hex_x, hex_y), hex_text, font=hex_font, fill=hex_color)
 
 
-def draw_top_header(
-    draw: ImageDraw.ImageDraw,
-    palette: Palette,
-    size: tuple[int, int],
-    rects: list[tuple[int, int, int, int]],
-) -> None:
-    width, height = size
-    edge_pad = int(width * config.EDGE_PADDING_RATIO)
-    header_offset = int(height * config.BAND_HEADER_OFFSET_RATIO)
-    header_size = max(14, int(height * config.HEADER_FONT_RATIO))
-    header_font = load_font(header_size)
-    header_color = text_color_for_background(normalize_hex(palette.bands[0].hex))
-    tracking = max(1, int(header_size * config.BRAND_HANDLE_TRACKING_RATIO))
-    stroke_width = 1
-
-    handle_w = _text_width_with_tracking(
-        draw,
-        config.BRAND_HANDLE,
-        header_font,
-        tracking,
-        stroke_width=stroke_width,
-    )
-    handle_x = width - edge_pad - handle_w
-    handle_y = rects[0][1] + header_offset
-    _draw_text_with_tracking(
-        draw,
-        config.BRAND_HANDLE,
-        handle_x,
-        handle_y,
-        header_font,
-        header_color,
-        tracking,
-        stroke_width=stroke_width,
-    )
-
-
 def save_image(image: Image.Image, output_path: Path) -> Path:
     output_path.parent.mkdir(parents=True, exist_ok=True)
     image.save(output_path, format="PNG", optimize=True)
@@ -188,11 +109,10 @@ def save_image(image: Image.Image, output_path: Path) -> Path:
 
 
 def render_palette_card(palette: Palette, size: tuple[int, int]) -> Image.Image:
-    """Render a full palette card with header and all band content."""
+    """Render a full palette card with all band content."""
     _, height = size
     image, draw, rects = new_band_canvas(palette, size)
-    draw_top_header(draw, palette, size, rects)
-    title_size, hex_size, _header_size = band_typography(height)
+    title_size, hex_size = band_typography(height)
     for band, rect in zip(palette.bands, rects):
         draw_band_content(draw, band, rect, title_size, hex_size)
     return image
