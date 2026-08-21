@@ -1,0 +1,545 @@
+{
+  "version": 1,
+  "palettes": [
+    {
+      "theme": "Autumn Pastels",
+      "bands": [
+        {
+          "name": "butter",
+          "hex": "#feefb8"
+        },
+        {
+          "name": "milk tea",
+          "hex": "#d8c4b6"
+        },
+        {
+          "name": "chocopie",
+          "hex": "#432f2e"
+        }
+      ],
+      "caption": "save this for your next coffee date outfit ☕️✨ #tintixlab #colorpalette #outfitideas #aesthetic #genzfashion"
+    },
+    {
+      "theme": "Soft Academia",
+      "bands": [
+        {
+          "name": "parchment",
+          "hex": "#f5f0e1"
+        },
+        {
+          "name": "taupe",
+          "hex": "#b8a898"
+        },
+        {
+          "name": "ink",
+          "hex": "#2c2416"
+        }
+      ],
+      "caption": "soft academia palette for library girl fits 📚 #tintixlab #colorpalette #outfitideas #aesthetic #genzfashion"
+    },
+    {
+      "theme": "City Sunset",
+      "bands": [
+        {
+          "name": "peach",
+          "hex": "#ffb088"
+        },
+        {
+          "name": "dusk",
+          "hex": "#e8a0a0"
+        },
+        {
+          "name": "night",
+          "hex": "#2d1f3d"
+        }
+      ],
+      "caption": "city sunset colors for evening stroll fits 🌆 #tintixlab #colorpalette #outfitideas #aesthetic #genzfashion"
+    },
+    {
+      "theme": "Vintage Denim",
+      "bands": [
+        {
+          "name": "denim",
+          "hex": "#6b8cae"
+        },
+        {
+          "name": "wash",
+          "hex": "#c5d5e8"
+        },
+        {
+          "name": "indigo",
+          "hex": "#1e3a5f"
+        }
+      ],
+      "caption": "vintage denim palette — classic never dies 👖 #tintixlab #colorpalette #outfitideas #aesthetic #genzfashion"
+    },
+    {
+      "theme": "Cottage Core",
+      "bands": [
+        {
+          "name": "meadow",
+          "hex": "#a8c686"
+        },
+        {
+          "name": "cream",
+          "hex": "#faf6f0"
+        },
+        {
+          "name": "soil",
+          "hex": "#5c4033"
+        }
+      ],
+      "caption": "cottage core colors for picnic day fits 🧺 #tintixlab #colorpalette #outfitideas #aesthetic #genzfashion"
+    },
+    {
+      "theme": "Y2K Candy",
+      "bands": [
+        {
+          "name": "bubblegum",
+          "hex": "#ff9ecd"
+        },
+        {
+          "name": "lemon",
+          "hex": "#fff59d"
+        },
+        {
+          "name": "grape",
+          "hex": "#7b5ea7"
+        }
+      ],
+      "caption": "y2k candy palette — throwback but make it chic 💿 #tintixlab #colorpalette #outfitideas #aesthetic #genzfashion"
+    },
+    {
+      "theme": "Clean Girl",
+      "bands": [
+        {
+          "name": "linen",
+          "hex": "#f5f0eb"
+        },
+        {
+          "name": "sand",
+          "hex": "#d4c4b0"
+        },
+        {
+          "name": "espresso",
+          "hex": "#3c2a21"
+        }
+      ],
+      "caption": "clean girl neutrals for effortless fits 🤍 #tintixlab #colorpalette #outfitideas #aesthetic #genzfashion"
+    },
+    {
+      "theme": "Dark Cherry",
+      "bands": [
+        {
+          "name": "cherry",
+          "hex": "#8b2942"
+        },
+        {
+          "name": "blush",
+          "hex": "#f2d4d4"
+        },
+        {
+          "name": "noir",
+          "hex": "#1a0a0f"
+        }
+      ],
+      "caption": "dark cherry palette for date night fits 🍒 #tintixlab #colorpalette #outfitideas #aesthetic #genzfashion"
+    },
+    {
+      "theme": "Arctic Frost",
+      "bands": [
+        {
+          "name": "ice",
+          "hex": "#d4e8f0"
+        },
+        {
+          "name": "snow",
+          "hex": "#f8fbfd"
+        },
+        {
+          "name": "steel",
+          "hex": "#4a6670"
+        }
+      ],
+      "caption": "arctic frost tones for winter layering ❄️ #tintixlab #colorpalette #outfitideas #aesthetic #genzfashion"
+    },
+    {
+      "theme": "Tropical Punch",
+      "bands": [
+        {
+          "name": "mango",
+          "hex": "#ffb347"
+        },
+        {
+          "name": "aqua",
+          "hex": "#7fcdcd"
+        },
+        {
+          "name": "coral",
+          "hex": "#ff6f61"
+        }
+      ],
+      "caption": "tropical punch palette for vacation fits 🌴 #tintixlab #colorpalette #outfitideas #aesthetic #genzfashion"
+    },
+    {
+      "theme": "Old Money",
+      "bands": [
+        {
+          "name": "ivory",
+          "hex": "#fffff0"
+        },
+        {
+          "name": "camel",
+          "hex": "#c19a6b"
+        },
+        {
+          "name": "forest",
+          "hex": "#2d4a3e"
+        }
+      ],
+      "caption": "old money palette — quiet luxury girl era 💅 #tintixlab #colorpalette #outfitideas #aesthetic #genzfashion"
+    },
+    {
+      "theme": "Grunge Rose",
+      "bands": [
+        {
+          "name": "rose",
+          "hex": "#b56576"
+        },
+        {
+          "name": "smoke",
+          "hex": "#6c757d"
+        },
+        {
+          "name": "black",
+          "hex": "#1a1a1a"
+        }
+      ],
+      "caption": "grunge rose colors for edgy soft fits 🥀 #tintixlab #colorpalette #outfitideas #aesthetic #genzfashion"
+    },
+    {
+      "theme": "Sunset Drive",
+      "bands": [
+        {
+          "name": "tangerine",
+          "hex": "#ff9966"
+        },
+        {
+          "name": "lavender",
+          "hex": "#c8a2c8"
+        },
+        {
+          "name": "twilight",
+          "hex": "#4a3f6b"
+        }
+      ],
+      "caption": "sunset drive palette for golden hour fits 🚗 #tintixlab #colorpalette #outfitideas #aesthetic #genzfashion"
+    },
+    {
+      "theme": "Earthy Tones",
+      "bands": [
+        {
+          "name": "clay",
+          "hex": "#b87333"
+        },
+        {
+          "name": "sage",
+          "hex": "#9caf88"
+        },
+        {
+          "name": "umber",
+          "hex": "#4a3728"
+        }
+      ],
+      "caption": "earthy tones for nature girl outfits 🍂 #tintixlab #colorpalette #outfitideas #aesthetic #genzfashion"
+    },
+    {
+      "theme": "Bubble Bath",
+      "bands": [
+        {
+          "name": "soap",
+          "hex": "#e8f4f8"
+        },
+        {
+          "name": "pink",
+          "hex": "#f8d7da"
+        },
+        {
+          "name": "lavender",
+          "hex": "#d8c4e8"
+        }
+      ],
+      "caption": "bubble bath palette — self care aesthetic 🛁 #tintixlab #colorpalette #outfitideas #aesthetic #genzfashion"
+    },
+    {
+      "theme": "Retro Sport",
+      "bands": [
+        {
+          "name": "cream",
+          "hex": "#f5f5dc"
+        },
+        {
+          "name": "red",
+          "hex": "#c41e3a"
+        },
+        {
+          "name": "navy",
+          "hex": "#1e3a5f"
+        }
+      ],
+      "caption": "retro sport colors for athleisure fits 🎾 #tintixlab #colorpalette #outfitideas #aesthetic #genzfashion"
+    },
+    {
+      "theme": "Moonlit Garden",
+      "bands": [
+        {
+          "name": "moon",
+          "hex": "#e8e4f0"
+        },
+        {
+          "name": "petal",
+          "hex": "#d4a5a5"
+        },
+        {
+          "name": "midnight",
+          "hex": "#2d1b3d"
+        }
+      ],
+      "caption": "moonlit garden palette for romantic fits 🌙 #tintixlab #colorpalette #outfitideas #aesthetic #genzfashion"
+    },
+    {
+      "theme": "Citrus Fresh",
+      "bands": [
+        {
+          "name": "lemon",
+          "hex": "#fff44f"
+        },
+        {
+          "name": "lime",
+          "hex": "#c5e384"
+        },
+        {
+          "name": "leaf",
+          "hex": "#4a7c59"
+        }
+      ],
+      "caption": "citrus fresh colors for bright summer fits 🍋 #tintixlab #colorpalette #outfitideas #aesthetic #genzfashion"
+    },
+    {
+      "theme": "Warm Minimal",
+      "bands": [
+        {
+          "name": "oat",
+          "hex": "#e8dcc8"
+        },
+        {
+          "name": "stone",
+          "hex": "#b8a898"
+        },
+        {
+          "name": "charcoal",
+          "hex": "#36454f"
+        }
+      ],
+      "caption": "warm minimal palette for capsule wardrobe fits 🧥 #tintixlab #colorpalette #outfitideas #aesthetic #genzfashion"
+    },
+    {
+      "theme": "Berry Smoothie",
+      "bands": [
+        {
+          "name": "raspberry",
+          "hex": "#c72c48"
+        },
+        {
+          "name": "yogurt",
+          "hex": "#fff5f0"
+        },
+        {
+          "name": "acai",
+          "hex": "#4a1942"
+        }
+      ],
+      "caption": "berry smoothie palette — gym to brunch fits 🫐 #tintixlab #colorpalette #outfitideas #aesthetic #genzfashion"
+    },
+    {
+      "theme": "Sakura Bloom",
+      "bands": [
+        {
+          "name": "sakura",
+          "hex": "#ffb7c5"
+        },
+        {
+          "name": "blossom",
+          "hex": "#ffe4e9"
+        },
+        {
+          "name": "branch",
+          "hex": "#5c4033"
+        }
+      ],
+      "caption": "sakura bloom colors for spring fits 🌸 #tintixlab #colorpalette #outfitideas #aesthetic #genzfashion"
+    },
+    {
+      "theme": "Coffee Shop",
+      "bands": [
+        {
+          "name": "americano",
+          "hex": "#3c2415"
+        },
+        {
+          "name": "latte",
+          "hex": "#d4b896"
+        },
+        {
+          "name": "foam",
+          "hex": "#faf6f0"
+        }
+      ],
+      "caption": "coffee shop palette — your daily uniform ☕️ #tintixlab #colorpalette #outfitideas #aesthetic #genzfashion"
+    },
+    {
+      "theme": "Neon Nights",
+      "bands": [
+        {
+          "name": "neon",
+          "hex": "#39ff14"
+        },
+        {
+          "name": "electric",
+          "hex": "#7df9ff"
+        },
+        {
+          "name": "void",
+          "hex": "#0d0221"
+        }
+      ],
+      "caption": "neon nights palette for bold street fits 🌃 #tintixlab #colorpalette #outfitideas #aesthetic #genzfashion"
+    },
+    {
+      "theme": "Prairie Warmth",
+      "bands": [
+        {
+          "name": "wheat",
+          "hex": "#f5deb3"
+        },
+        {
+          "name": "rust",
+          "hex": "#b7410e"
+        },
+        {
+          "name": "prairie",
+          "hex": "#8b7355"
+        }
+      ],
+      "caption": "prairie warmth colors for fall layering 🌾 #tintixlab #colorpalette #outfitideas #aesthetic #genzfashion"
+    },
+    {
+      "theme": "Ice Cream Shop",
+      "bands": [
+        {
+          "name": "vanilla",
+          "hex": "#f3e5ab"
+        },
+        {
+          "name": "mint chip",
+          "hex": "#98d8c8"
+        },
+        {
+          "name": "chocolate",
+          "hex": "#5c4033"
+        }
+      ],
+      "caption": "ice cream shop palette — sweet summer fits 🍦 #tintixlab #colorpalette #outfitideas #aesthetic #genzfashion"
+    },
+    {
+      "theme": "Studio Beige",
+      "bands": [
+        {
+          "name": "beige",
+          "hex": "#f5f5dc"
+        },
+        {
+          "name": "greige",
+          "hex": "#b8a898"
+        },
+        {
+          "name": "espresso",
+          "hex": "#3e2723"
+        }
+      ],
+      "caption": "studio beige neutrals for Pinterest board fits 📌 #tintixlab #colorpalette #outfitideas #aesthetic #genzfashion"
+    },
+    {
+      "theme": "Rainy Day",
+      "bands": [
+        {
+          "name": "rain",
+          "hex": "#9eb7c8"
+        },
+        {
+          "name": "cloud",
+          "hex": "#e8ecef"
+        },
+        {
+          "name": "storm",
+          "hex": "#37474f"
+        }
+      ],
+      "caption": "rainy day palette for cozy indoor fits 🌧️ #tintixlab #colorpalette #outfitideas #aesthetic #genzfashion"
+    },
+    {
+      "theme": "Pistachio Coquette",
+      "bands": [
+        {
+          "name": "pistachio",
+          "hex": "#c5d86d"
+        },
+        {
+          "name": "ballet",
+          "hex": "#f4c2c2"
+        },
+        {
+          "name": "cacao",
+          "hex": "#4a2c2a"
+        }
+      ],
+      "caption": "pistachio coquette — soft girl energy 🩰🍵 #tintixlab #colorpalette #outfitideas #aesthetic #genzfashion"
+    },
+    {
+      "theme": "Desert Bloom",
+      "bands": [
+        {
+          "name": "bloom",
+          "hex": "#e8a598"
+        },
+        {
+          "name": "sand",
+          "hex": "#f2e8dc"
+        },
+        {
+          "name": "cactus",
+          "hex": "#6b8e23"
+        }
+      ],
+      "caption": "desert bloom colors for warm weather fits 🌵 #tintixlab #colorpalette #outfitideas #aesthetic #genzfashion"
+    },
+    {
+      "theme": "Midnight Snack",
+      "bands": [
+        {
+          "name": "midnight",
+          "hex": "#191970"
+        },
+        {
+          "name": "cookie",
+          "hex": "#d4a574"
+        },
+        {
+          "name": "cream",
+          "hex": "#fff8dc"
+        }
+      ],
+      "caption": "midnight snack palette for late night fits 🌙🍪 #tintixlab #colorpalette #outfitideas #aesthetic #genzfashion"
+    }
+  ]
+}

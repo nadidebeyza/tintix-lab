@@ -164,6 +164,27 @@ def generate_palette(
     )
 
 
+def palette_fingerprint(palette: Palette) -> str:
+    """Stable identity for deduplication within a pool."""
+    from colors import normalize_hex
+
+    hexes = "|".join(sorted(normalize_hex(b.hex).lower() for b in palette.bands))
+    names = "|".join(b.name.lower() for b in palette.bands)
+    return f"{palette.theme.strip().lower()}::{names}::{hexes}"
+
+
+def palette_to_dict(palette: Palette) -> dict[str, Any]:
+    return {
+        "theme": palette.theme,
+        "bands": [{"name": b.name, "hex": b.hex} for b in palette.bands],
+        "caption": palette.caption,
+    }
+
+
+def palette_from_dict(data: dict[str, Any]) -> Palette:
+    return _normalize_palette(data)
+
+
 def sample_palette() -> Palette:
     """Offline fallback for local design testing."""
     return Palette(

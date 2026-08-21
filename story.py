@@ -14,8 +14,9 @@ from PIL import Image
 
 import canvas
 import config
-from gemini_client import Palette, generate_palette, sample_palette
+from gemini_client import Palette, sample_palette
 from instagram_client import publish_to_instagram
+from palette_pool import advance_after_publish, get_next_palette
 
 SIZE = config.STORY_SIZE
 
@@ -66,13 +67,17 @@ def main(argv: list[str] | None = None) -> int:
     args = build_parser().parse_args(argv)
 
     try:
-        palette = sample_palette() if args.sample else generate_palette(model=args.model)
+        if args.sample:
+            palette = sample_palette()
+            palette_index = None
+        else:
+            palette, palette_index, _cycle = get_next_palette("story")
     except EnvironmentError as exc:
         print(f"Error: {exc}", file=sys.stderr)
         print("Tip: run with --sample to test locally without an API key.", file=sys.stderr)
         return 1
     except Exception as exc:
-        print(f"Failed to generate palette: {exc}", file=sys.stderr)
+        print(f"Failed to load palette: {exc}", file=sys.stderr)
         return 1
 
     print(f"Theme: {palette.theme}")
@@ -94,6 +99,8 @@ def main(argv: list[str] | None = None) -> int:
             )
             for kind, media_id in results.items():
                 print(f"Published {kind}: media_id={media_id}")
+            if palette_index is not None:
+                advance_after_publish("story", palette_index)
         except Exception as exc:
             print(f"Instagram publish failed: {exc}", file=sys.stderr)
             return 1

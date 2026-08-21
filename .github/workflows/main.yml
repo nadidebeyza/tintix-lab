@@ -17,6 +17,9 @@ on:
           - story
           - post
 
+permissions:
+  contents: write
+
 concurrency:
   group: instagram-${{ github.event.schedule || github.event.inputs.format }}
   cancel-in-progress: false
@@ -49,6 +52,14 @@ jobs:
           INSTAGRAM_ACCESS_TOKEN: ${{ secrets.INSTAGRAM_ACCESS_TOKEN }}
         run: python main.py story
 
+      - name: Save palette rotation state
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add data/state.json
+          git diff --staged --quiet || git commit -m "chore: advance story palette rotation"
+          git push
+
   post:
     if: >-
       (github.event_name == 'workflow_dispatch' && github.event.inputs.format == 'post') ||
@@ -75,3 +86,11 @@ jobs:
           INSTAGRAM_ACCOUNT_ID: ${{ secrets.INSTAGRAM_ACCOUNT_ID }}
           INSTAGRAM_ACCESS_TOKEN: ${{ secrets.INSTAGRAM_ACCESS_TOKEN }}
         run: python main.py post
+
+      - name: Save palette rotation state
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add data/state.json
+          git diff --staged --quiet || git commit -m "chore: advance post palette rotation"
+          git push

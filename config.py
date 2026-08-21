@@ -1,5 +1,7 @@
 """Brand and layout constants for @tintix.lab."""
 
+from pathlib import Path
+
 BRAND_HANDLE = "@tintix.lab"
 
 # Instagram canvas sizes
@@ -18,3 +20,9 @@ EDGE_PADDING_RATIO = 0.045
 BAND_HEADER_OFFSET_RATIO = 0.035
 
 OUTPUT_DIR = "output"
+
+# Palette rotation (30 unique story + 30 unique post before repeat)
+POOL_SIZE = 30
+DATA_DIR = Path(__file__).parent / "data"
+POOLS_DIR = DATA_DIR / "pools"
+STATE_FILE = DATA_DIR / "state.json"
