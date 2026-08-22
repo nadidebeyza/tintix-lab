@@ -12,7 +12,15 @@ BROWSER_USER_AGENT = (
     "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 "
     "(KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36"
 )
-REQUEST_HEADERS = {"User-Agent": BROWSER_USER_AGENT}
+# Avoid Expect: 100-continue — some hosts (including Catbox) return 412 otherwise.
+REQUEST_HEADERS = {"User-Agent": BROWSER_USER_AGENT, "Expect": ""}
+
+TRUSTED_IMAGE_CDN_PREFIXES = (
+    "https://files.catbox.moe/",
+    "https://litter.catbox.moe/",
+    "https://d.uguu.se/",
+    "https://n.uguu.se/",
+)
 
 
 def _verify_public_image_url(url: str) -> bool:
@@ -32,8 +40,8 @@ def _verify_public_image_url(url: str) -> bool:
         if "text/html" in content_type:
             return False
     except requests.RequestException as exc:
-        if url.startswith(("https://files.catbox.moe/", "https://litter.catbox.moe/")):
-            print(f"Could not probe {url} locally ({exc}) — trusting Catbox CDN URL")
+        if url.startswith(TRUSTED_IMAGE_CDN_PREFIXES):
+            print(f"Could not probe {url} locally ({exc}) — trusting CDN URL")
             return True
         return False
     return False
@@ -75,11 +83,30 @@ def _upload_to_litterbox(file_path: Path) -> str:
     return url
 
 
+def _upload_to_uguu(file_path: Path) -> str:
+    print("Uploading image to Uguu...")
+    with file_path.open("rb") as handle:
+        response = requests.post(
+            "https://uguu.se/upload",
+            files={"files[]": (file_path.name, handle, "image/png")},
+            headers=REQUEST_HEADERS,
+            timeout=60,
+        )
+    response.raise_for_status()
+    payload = response.json()
+    files = payload.get("files") or []
+    if not files or not files[0].get("url"):
+        raise ValueError(f"Unexpected Uguu response: {response.text[:200]}")
+    url = files[0]["url"]
+    print(f"Hosted at Uguu — {url}")
+    return url
+
+
 def get_public_image_url(file_path: Path) -> str:
     """
     Upload and return an Instagram-compatible direct image URL.
 
-    Uses IMAGE_PUBLIC_BASE_URL when set, otherwise Catbox → Litterbox fallbacks.
+    Uses IMAGE_PUBLIC_BASE_URL when set, otherwise Catbox → Litterbox → Uguu.
     """
     base_url = os.getenv("IMAGE_PUBLIC_BASE_URL", "").rstrip("/")
     if base_url:
@@ -88,6 +115,7 @@ def get_public_image_url(file_path: Path) -> str:
     uploaders: list[tuple[str, Callable[[Path], str]]] = [
         ("Catbox", _upload_to_catbox),
         ("Litterbox", _upload_to_litterbox),
+        ("Uguu", _upload_to_uguu),
     ]
     errors: list[str] = []
 
