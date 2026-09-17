@@ -47,6 +47,9 @@ jobs:
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
           INSTAGRAM_ACCOUNT_ID: ${{ secrets.INSTAGRAM_ACCOUNT_ID }}
           INSTAGRAM_ACCESS_TOKEN: ${{ secrets.INSTAGRAM_ACCESS_TOKEN }}
+          BRAND_NAME: ${{ secrets.BRAND_NAME }}
+          BRAND_HASHTAG: ${{ secrets.BRAND_HASHTAG }}
+          WATERMARK_TEXT: ${{ secrets.WATERMARK_TEXT }}
         run: python story.py
 
       - name: Commit history changes
@@ -88,6 +91,9 @@ jobs:
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
           INSTAGRAM_ACCOUNT_ID: ${{ secrets.INSTAGRAM_ACCOUNT_ID }}
           INSTAGRAM_ACCESS_TOKEN: ${{ secrets.INSTAGRAM_ACCESS_TOKEN }}
+          BRAND_NAME: ${{ secrets.BRAND_NAME }}
+          BRAND_HASHTAG: ${{ secrets.BRAND_HASHTAG }}
+          WATERMARK_TEXT: ${{ secrets.WATERMARK_TEXT }}
         run: python main.py
 
       - name: Commit history changes

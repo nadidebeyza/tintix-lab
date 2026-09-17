@@ -9,29 +9,32 @@ import time
 from dataclasses import dataclass
 from typing import Any, Literal
 
-GEMINI_PROMPT_BASE = """
-You are a Gen-Z fashion color theorist and stylist for the Instagram page @tintix.lab.
+BRAND_NAME = os.getenv("BRAND_NAME", "tintix.lab")
+BRAND_HASHTAG = os.getenv("BRAND_HASHTAG", "tintixlab")
+
+GEMINI_PROMPT_TEMPLATE = """
+You are a Gen-Z fashion color theorist and stylist for the Instagram page @{brand_name}.
 Your task is to create a trendy, aesthetic 3-color palette that girls aged 16-25 can use for outfit styling, makeup, or room aesthetics.
 
 Return ONLY a valid JSON object with no markdown backticks:
-{
+{{
   "theme": "Aesthetic Theme Name",
   "bands": [
-    {
+    {{
       "name": "butter",
       "hex": "#HEXCODE1"
-    },
-    {
+    }},
+    {{
       "name": "milk tea",
       "hex": "#HEXCODE2"
-    },
-    {
+    }},
+    {{
       "name": "chocopie",
       "hex": "#HEXCODE3"
-    }
+    }}
   ],
-  "caption": "An engaging, friendly Instagram caption with aesthetic emojis and relevant hashtags including #tintixlab."
-}
+  "caption": "An engaging, friendly Instagram caption with aesthetic emojis and relevant hashtags including #{brand_hashtag}."
+}}
 
 Rules:
 1. 'name' must be short, all-lowercase (1-2 words max, e.g., 'powder', 'butter', 'chocopie', 'lacté', 'matcha', 'espresso').
@@ -41,6 +44,14 @@ Rules:
 5. Generate COMPLETELY DIFFERENT hex codes each time — avoid subtle variations of the same base colors (e.g., don't just make cream slightly darker/lighter, don't reuse similar beige/brown/pink tones).
 6. Explore DIVERSE color families: cool blues, forest greens, berry purples, terracotta, sage, coral, lavender, mint, dusty rose, olive, rust, teal, mauve, mustard, burgundy. Avoid defaulting to the same warm neutrals.
 """
+
+
+def _get_prompt_base() -> str:
+    return GEMINI_PROMPT_TEMPLATE.format(
+        brand_name=BRAND_NAME,
+        brand_hashtag=BRAND_HASHTAG,
+    )
+
 
 Format = Literal["story", "post"]
 DUPLICATE_RETRIES = int(os.getenv("DUPLICATE_PALETTE_RETRIES", "5"))
@@ -158,7 +169,7 @@ def build_gemini_prompt(
 ) -> str:
     from palette_history import format_history_for_prompt
 
-    prompt = GEMINI_PROMPT_BASE + format_history_for_prompt(kind, history)
+    prompt = _get_prompt_base() + format_history_for_prompt(kind, history)
     if duplicate_retry:
         prompt += (
             "\nYour previous answer duplicated a banned palette. "
@@ -274,7 +285,7 @@ def sample_palette() -> Palette:
             Band(name="chocopie", hex="#432f2e"),
         ],
         caption=_capitalize_caption_sentences(
-            "Save this palette for your next coffee date outfit ☕️✨ "
-            "#tintixlab #outfitideas #colorpalette #genzfashion"
+            f"Save this palette for your next coffee date outfit ☕️✨ "
+            f"#{BRAND_HASHTAG} #outfitideas #colorpalette #genzfashion"
         ),
     )

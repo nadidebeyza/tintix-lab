@@ -1,7 +1,8 @@
-"""Shared drawing helpers for @tintix.lab palette cards."""
+"""Shared drawing helpers for palette cards."""
 
 from __future__ import annotations
 
+import os
 from pathlib import Path
 
 from PIL import Image, ImageDraw
@@ -14,7 +15,9 @@ from colors import (
     text_color_for_background,
 )
 from fonts_loader import load_arial_font, load_bold_font
-from gemini_client import Band, Palette
+from gemini_client import BRAND_NAME, Band, Palette
+
+WATERMARK_TEXT = os.getenv("WATERMARK_TEXT", f"@{BRAND_NAME}")
 
 
 def band_rects(width: int, height: int) -> list[tuple[int, int, int, int]]:
@@ -108,11 +111,48 @@ def save_image(image: Image.Image, output_path: Path) -> Path:
     return output_path
 
 
-def render_palette_card(palette: Palette, size: tuple[int, int]) -> Image.Image:
+def draw_watermark(
+    draw: ImageDraw.ImageDraw,
+    image_size: tuple[int, int],
+    bottom_band_hex: str,
+) -> None:
+    """Draw watermark text in bottom-right corner."""
+    if not WATERMARK_TEXT:
+        return
+
+    width, height = image_size
+    font_size = max(16, int(height * 0.025))
+    font = load_arial_font(font_size)
+
+    text_color = text_color_for_background(bottom_band_hex)
+    text_color_with_alpha = (*text_color, 180)
+
+    bbox = draw.textbbox((0, 0), WATERMARK_TEXT, font=font)
+    text_w = bbox[2] - bbox[0]
+    text_h = bbox[3] - bbox[1]
+
+    padding = int(width * 0.02)
+    x = width - text_w - padding
+    y = height - text_h - padding
+
+    draw.text((x, y), WATERMARK_TEXT, font=font, fill=text_color)
+
+
+def render_palette_card(
+    palette: Palette,
+    size: tuple[int, int],
+    *,
+    add_watermark: bool = True,
+) -> Image.Image:
     """Render a full palette card with all band content."""
     _, height = size
     image, draw, rects = new_band_canvas(palette, size)
     title_size, hex_size = band_typography(height)
     for band, rect in zip(palette.bands, rects):
         draw_band_content(draw, band, rect, title_size, hex_size)
+
+    if add_watermark and WATERMARK_TEXT:
+        bottom_band_hex = normalize_hex(palette.bands[-1].hex)
+        draw_watermark(draw, size, bottom_band_hex)
+
     return image
