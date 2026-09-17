@@ -2,11 +2,13 @@
 
 from __future__ import annotations
 
+import math
 import re
 from typing import Tuple
 
 HexColor = str
 RGB = Tuple[int, int, int]
+LAB = Tuple[float, float, float]
 
 
 def parse_hex(hex_color: str) -> RGB:
@@ -80,3 +82,65 @@ def muted_text_color_for_background(hex_color: str) -> RGB:
         return (min(255, r + 35), min(255, g + 30), min(255, b + 28))
     r, g, b = base
     return (max(0, r - 25), max(0, g - 25), max(0, b - 25))
+
+
+def _srgb_to_linear(c: float) -> float:
+    """Convert sRGB channel (0-1) to linear RGB."""
+    if c <= 0.04045:
+        return c / 12.92
+    return ((c + 0.055) / 1.055) ** 2.4
+
+
+def _xyz_to_lab_f(t: float) -> float:
+    """CIE LAB transfer function."""
+    delta = 6.0 / 29.0
+    if t > delta ** 3:
+        return t ** (1.0 / 3.0)
+    return t / (3.0 * delta ** 2) + 4.0 / 29.0
+
+
+def rgb_to_lab(rgb: RGB) -> LAB:
+    """
+    Convert RGB to CIELAB color space.
+    Uses D65 illuminant (standard daylight).
+    """
+    r, g, b = rgb
+    r_lin = _srgb_to_linear(r / 255.0)
+    g_lin = _srgb_to_linear(g / 255.0)
+    b_lin = _srgb_to_linear(b / 255.0)
+
+    x = 0.4124564 * r_lin + 0.3575761 * g_lin + 0.1804375 * b_lin
+    y = 0.2126729 * r_lin + 0.7151522 * g_lin + 0.0721750 * b_lin
+    z = 0.0193339 * r_lin + 0.1191920 * g_lin + 0.9503041 * b_lin
+
+    x_n, y_n, z_n = 0.95047, 1.00000, 1.08883
+
+    f_x = _xyz_to_lab_f(x / x_n)
+    f_y = _xyz_to_lab_f(y / y_n)
+    f_z = _xyz_to_lab_f(z / z_n)
+
+    L = 116.0 * f_y - 16.0
+    a = 500.0 * (f_x - f_y)
+    b_val = 200.0 * (f_y - f_z)
+
+    return (L, a, b_val)
+
+
+def delta_e_cie76(lab1: LAB, lab2: LAB) -> float:
+    """
+    Calculate Delta E (CIE76) - Euclidean distance in LAB space.
+    Values < 1: imperceptible difference
+    Values 1-2: perceptible through close observation
+    Values 2-10: perceptible at a glance
+    Values 11-49: colors are more similar than opposite
+    Values 100: colors are exact opposites
+    """
+    dL = lab1[0] - lab2[0]
+    da = lab1[1] - lab2[1]
+    db = lab1[2] - lab2[2]
+    return math.sqrt(dL * dL + da * da + db * db)
+
+
+def hex_to_lab(hex_color: str) -> LAB:
+    """Convenience function: hex string to LAB."""
+    return rgb_to_lab(parse_hex(hex_color))

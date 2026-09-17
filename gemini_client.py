@@ -38,6 +38,8 @@ Rules:
 2. Color hexes must harmonize beautifully (e.g., 2 soft pastel/muted tones + 1 rich grounding tone).
 3. NEVER repeat any palette listed in the "Recently published — DO NOT REUSE" section.
 4. caption sentences must start with an uppercase letter (sentence case for prose; hashtags stay lowercase).
+5. Generate COMPLETELY DIFFERENT hex codes each time — avoid subtle variations of the same base colors (e.g., don't just make cream slightly darker/lighter, don't reuse similar beige/brown/pink tones).
+6. Explore DIVERSE color families: cool blues, forest greens, berry purples, terracotta, sage, coral, lavender, mint, dusty rose, olive, rust, teal, mauve, mustard, burgundy. Avoid defaulting to the same warm neutrals.
 """
 
 Format = Literal["story", "post"]

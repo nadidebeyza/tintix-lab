@@ -4,16 +4,19 @@ from __future__ import annotations
 
 import json
 import os
+import re
 from datetime import datetime, timezone
 from pathlib import Path
 from typing import Literal
 
+from colors import delta_e_cie76, hex_to_lab
 from gemini_client import Palette, palette_fingerprint
 
 Format = Literal["story", "post"]
 
 BASE_DIR = Path(__file__).resolve().parent
 HISTORY_SIZE = int(os.getenv("PALETTE_HISTORY_SIZE", "30"))
+MIN_COLOR_DISTANCE = float(os.getenv("MIN_COLOR_DISTANCE", "12.0"))
 STORY_HISTORY_PATH = BASE_DIR / "story_history.json"
 POST_HISTORY_PATH = BASE_DIR / "post_history.json"
 
@@ -53,6 +56,58 @@ def save_history(kind: Format, entries: list[dict[str, str]]) -> None:
     )
 
 
+def _extract_hexes_from_bands(bands_str: str) -> list[str]:
+    """Extract hex codes from bands string like 'butter (#feefb8), milk tea (#d8c4b6)'."""
+    return re.findall(r"#[0-9a-fA-F]{6}", bands_str)
+
+
+def _extract_names_from_bands(bands_str: str) -> list[str]:
+    """Extract color names from bands string like 'butter (#feefb8), milk tea (#d8c4b6)'."""
+    names = re.findall(r"([a-zA-Z][a-zA-Z\s]*?)\s*\(#[0-9a-fA-F]{6}\)", bands_str)
+    return [name.strip().lower() for name in names if name.strip()]
+
+
+def _get_all_history_hexes(history: list[dict[str, str]]) -> list[str]:
+    """Collect all hex codes from history entries."""
+    hexes: list[str] = []
+    for entry in history:
+        bands_str = entry.get("bands", "")
+        hexes.extend(_extract_hexes_from_bands(bands_str))
+    return hexes
+
+
+def get_recent_color_names(history: list[dict[str, str]]) -> set[str]:
+    """Collect all color names from history entries."""
+    names: set[str] = set()
+    for entry in history:
+        bands_str = entry.get("bands", "")
+        names.update(_extract_names_from_bands(bands_str))
+    return names
+
+
+def is_color_too_similar(palette: Palette, history: list[dict[str, str]]) -> bool:
+    """
+    Check if any color in the new palette is perceptually too similar
+    to any color in recent history using Delta E (CIE76).
+    """
+    if not history:
+        return False
+
+    history_hexes = _get_all_history_hexes(history)
+    if not history_hexes:
+        return False
+
+    history_labs = [hex_to_lab(h) for h in history_hexes]
+
+    for band in palette.bands:
+        new_lab = hex_to_lab(band.hex)
+        for old_lab in history_labs:
+            distance = delta_e_cie76(new_lab, old_lab)
+            if distance < MIN_COLOR_DISTANCE:
+                return True
+    return False
+
+
 def is_duplicate_palette(palette: Palette, history: list[dict[str, str]]) -> bool:
     fingerprint = palette_fingerprint(palette)
     theme = palette.theme.strip().lower()
@@ -61,6 +116,8 @@ def is_duplicate_palette(palette: Palette, history: list[dict[str, str]]) -> boo
             return True
         if entry.get("theme", "").strip().lower() == theme:
             return True
+    if is_color_too_similar(palette, history):
+        return True
     return False
 
 
@@ -83,5 +140,14 @@ def format_history_for_prompt(kind: Format, history: list[dict[str, str]]) -> st
     ]
     for entry in history:
         lines.append(f"- {entry.get('theme')} [{entry.get('bands', '')}]\n")
-    lines.append("Pick a completely different palette not on this list.")
+    lines.append("Pick a completely different palette not on this list.\n")
+
+    used_names = get_recent_color_names(history)
+    if used_names:
+        sorted_names = sorted(used_names)
+        lines.append(
+            f"\nAvoid these recently used color names: {', '.join(sorted_names)}.\n"
+            "Use fresh, creative names that haven't appeared recently."
+        )
+
     return "".join(lines)
