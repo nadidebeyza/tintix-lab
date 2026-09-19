@@ -17,6 +17,12 @@
       "fingerprint": "sunset desert mirage::terracotta|sage|mustard::#8ea89d|#d66853|#e0a96d",
       "bands": "terracotta (#D66853), sage (#8EA89D), mustard (#E0A96D)",
       "published_at": "2026-09-18T19:25:38.727768+00:00"
+    },
+    {
+      "theme": "Nordic Frost",
+      "fingerprint": "nordic frost::glacier|faded blue|ink::#162834|#7a9bb0|#cbe3ec",
+      "bands": "glacier (#CBE3EC), faded blue (#7A9BB0), ink (#162834)",
+      "published_at": "2026-09-19T19:09:29.123014+00:00"
     }
   ]
 }
