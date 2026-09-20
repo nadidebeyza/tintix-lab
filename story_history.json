@@ -17,6 +17,12 @@
       "fingerprint": "submarine dream::seafoam|periwinkle|abyss::#1e2a4a|#bbc6ec|#c4e3d8",
       "bands": "seafoam (#C4E3D8), periwinkle (#BBC6EC), abyss (#1E2A4A)",
       "published_at": "2026-09-19T11:52:56.835927+00:00"
+    },
+    {
+      "theme": "Nordic Cabin",
+      "fingerprint": "nordic cabin::fog|oat|spruce::#2c423b|#d2dde6|#e6ddd1",
+      "bands": "fog (#D2DDE6), oat (#E6DDD1), spruce (#2C423B)",
+      "published_at": "2026-09-20T12:12:01.161333+00:00"
     }
   ]
 }
