@@ -23,6 +23,12 @@
       "fingerprint": "nordic frost::glacier|faded blue|ink::#162834|#7a9bb0|#cbe3ec",
       "bands": "glacier (#CBE3EC), faded blue (#7A9BB0), ink (#162834)",
       "published_at": "2026-09-19T19:09:29.123014+00:00"
+    },
+    {
+      "theme": "Coquette Grunge Blossom",
+      "fingerprint": "coquette grunge blossom::pistachio|blush|bordeaux::#4c1c24|#c3d3c4|#e8c8c8",
+      "bands": "pistachio (#C3D3C4), blush (#E8C8C8), bordeaux (#4C1C24)",
+      "published_at": "2026-09-20T19:14:50.870825+00:00"
     }
   ]
 }
