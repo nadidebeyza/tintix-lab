@@ -29,6 +29,12 @@
       "fingerprint": "coquette grunge blossom::pistachio|blush|bordeaux::#4c1c24|#c3d3c4|#e8c8c8",
       "bands": "pistachio (#C3D3C4), blush (#E8C8C8), bordeaux (#4C1C24)",
       "published_at": "2026-09-20T19:14:50.870825+00:00"
+    },
+    {
+      "theme": "Poetic Meadow",
+      "fingerprint": "poetic meadow::fog|peony|spruce::#1d3b3a|#c9d3cd|#d4a5a9",
+      "bands": "fog (#C9D3CD), peony (#D4A5A9), spruce (#1D3B3A)",
+      "published_at": "2026-09-21T21:28:10.023134+00:00"
     }
   ]
 }
