@@ -35,6 +35,12 @@
       "fingerprint": "poetic meadow::fog|peony|spruce::#1d3b3a|#c9d3cd|#d4a5a9",
       "bands": "fog (#C9D3CD), peony (#D4A5A9), spruce (#1D3B3A)",
       "published_at": "2026-09-21T21:28:10.023134+00:00"
+    },
+    {
+      "theme": "Digital Fairycore",
+      "fingerprint": "digital fairycore::lime|mauve|blackberry::#3d2031|#c9a2b8|#cad69b",
+      "bands": "lime (#CAD69B), mauve (#C9A2B8), blackberry (#3D2031)",
+      "published_at": "2026-09-21T21:31:44.800055+00:00"
     }
   ]
 }
