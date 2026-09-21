@@ -213,7 +213,12 @@ def generate_palette(
     history: list[dict[str, str]] | None = None,
 ) -> Palette:
     """Call Gemini and return a palette not in recent history."""
-    from palette_history import HISTORY_SIZE, is_duplicate_palette, load_history
+    from palette_history import (
+        HISTORY_SIZE,
+        is_duplicate_palette,
+        is_exact_repeat,
+        load_history,
+    )
 
     key = api_key or os.getenv("GEMINI_API_KEY")
     if not key:
@@ -234,6 +239,8 @@ def generate_palette(
         if fallback not in models:
             models.append(fallback)
 
+    near_miss: Palette | None = None
+
     for duplicate_attempt in range(1, DUPLICATE_RETRIES + 1):
         prompt = build_gemini_prompt(
             kind,
@@ -243,10 +250,19 @@ def generate_palette(
         palette = _generate_once(client, models, prompt)
         if not is_duplicate_palette(palette, recent):
             return palette
+        if near_miss is None and not is_exact_repeat(palette, recent):
+            near_miss = palette
         print(
             f"Duplicate blocked: {palette.theme} — regenerating "
             f"({duplicate_attempt}/{DUPLICATE_RETRIES})"
         )
+
+    if near_miss is not None:
+        print(
+            f"Warning: no fully distinct {kind} palette after {DUPLICATE_RETRIES} attempts — "
+            f"publishing closest new palette '{near_miss.theme}'."
+        )
+        return near_miss
 
     raise RuntimeError(
         f"Could not generate a unique {kind} palette after {DUPLICATE_RETRIES} attempts. "

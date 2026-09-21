@@ -4,22 +4,22 @@ on:
   schedule:
     # UTC 07:00 = Türkiye 10:00 -> Story
     - cron: "0 7 * * *"
-    # UTC 17:00 = Türkiye 20:00 -> Feed Post
-    - cron: "0 17 * * *"
+    # UTC 14:00 = Türkiye 17:00 -> Feed Post
+    - cron: "0 14 * * *"
   workflow_dispatch:
 
 permissions:
   contents: write
-
-concurrency:
-  group: tintix-lab-${{ github.ref_name }}
-  cancel-in-progress: false
 
 jobs:
   run-story:
     if: github.event.schedule == '0 7 * * *' || github.event_name == 'workflow_dispatch'
     runs-on: ubuntu-latest
     timeout-minutes: 15
+    # Story ve post ayrı gruplarda: biri diğerini kuyrukta bekletmez.
+    concurrency:
+      group: tintix-lab-story-${{ github.ref_name }}
+      cancel-in-progress: false
 
     steps:
       - name: Checkout repository
@@ -56,14 +56,25 @@ jobs:
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add story_history.json post_history.json
-          git diff --staged --quiet || git commit -m "Update palette history (story)"
-          git push || (git pull --rebase origin ${{ github.ref_name }} && git push)
+          git add story_history.json
+          git diff --staged --quiet && exit 0
+          git commit -m "Update palette history (story)"
+          for attempt in 1 2 3 4 5; do
+            git push && exit 0
+            echo "Push rejected (attempt $attempt) — rebasing onto remote"
+            git pull --rebase --autostash origin ${{ github.ref_name }}
+            sleep $((attempt * 5))
+          done
+          echo "Could not push palette history after 5 attempts" >&2
+          exit 1
 
   run-post:
-    if: github.event.schedule == '0 17 * * *' || github.event_name == 'workflow_dispatch'
+    if: github.event.schedule == '0 14 * * *' || github.event_name == 'workflow_dispatch'
     runs-on: ubuntu-latest
     timeout-minutes: 15
+    concurrency:
+      group: tintix-lab-post-${{ github.ref_name }}
+      cancel-in-progress: false
 
     steps:
       - name: Checkout repository
@@ -100,6 +111,14 @@ jobs:
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add story_history.json post_history.json
-          git diff --staged --quiet || git commit -m "Update palette history (post)"
-          git push || (git pull --rebase origin ${{ github.ref_name }} && git push)
+          git add post_history.json
+          git diff --staged --quiet && exit 0
+          git commit -m "Update palette history (post)"
+          for attempt in 1 2 3 4 5; do
+            git push && exit 0
+            echo "Push rejected (attempt $attempt) — rebasing onto remote"
+            git pull --rebase --autostash origin ${{ github.ref_name }}
+            sleep $((attempt * 5))
+          done
+          echo "Could not push palette history after 5 attempts" >&2
+          exit 1

@@ -16,7 +16,10 @@ Format = Literal["story", "post"]
 
 BASE_DIR = Path(__file__).resolve().parent
 HISTORY_SIZE = int(os.getenv("PALETTE_HISTORY_SIZE", "30"))
-MIN_COLOR_DISTANCE = float(os.getenv("MIN_COLOR_DISTANCE", "12.0"))
+MIN_COLOR_DISTANCE = float(os.getenv("MIN_COLOR_DISTANCE", "10.0"))
+# Only the newest entries are checked for perceptual similarity; matching every
+# color in a 30-entry history leaves almost no usable space in LAB.
+SIMILARITY_WINDOW = int(os.getenv("PALETTE_SIMILARITY_WINDOW", "8"))
 STORY_HISTORY_PATH = BASE_DIR / "story_history.json"
 POST_HISTORY_PATH = BASE_DIR / "post_history.json"
 
@@ -67,15 +70,6 @@ def _extract_names_from_bands(bands_str: str) -> list[str]:
     return [name.strip().lower() for name in names if name.strip()]
 
 
-def _get_all_history_hexes(history: list[dict[str, str]]) -> list[str]:
-    """Collect all hex codes from history entries."""
-    hexes: list[str] = []
-    for entry in history:
-        bands_str = entry.get("bands", "")
-        hexes.extend(_extract_hexes_from_bands(bands_str))
-    return hexes
-
-
 def get_recent_color_names(history: list[dict[str, str]]) -> set[str]:
     """Collect all color names from history entries."""
     names: set[str] = set()
@@ -85,30 +79,50 @@ def get_recent_color_names(history: list[dict[str, str]]) -> set[str]:
     return names
 
 
+def _safe_labs(hexes: list[str]) -> list[tuple[float, float, float]]:
+    labs = []
+    for value in hexes:
+        try:
+            labs.append(hex_to_lab(value))
+        except ValueError:
+            continue
+    return labs
+
+
 def is_color_too_similar(palette: Palette, history: list[dict[str, str]]) -> bool:
     """
-    Check if any color in the new palette is perceptually too similar
-    to any color in recent history using Delta E (CIE76).
+    Check whether the new palette recreates a single recent palette: a majority
+    of its bands must be perceptually close (Delta E CIE76) to the colors of one
+    history entry. A lone shared neutral is allowed.
     """
-    if not history:
+    if not history or not palette.bands:
         return False
 
-    history_hexes = _get_all_history_hexes(history)
-    if not history_hexes:
+    new_labs = _safe_labs([band.hex for band in palette.bands])
+    if not new_labs:
         return False
 
-    history_labs = [hex_to_lab(h) for h in history_hexes]
+    needed = max(2, len(new_labs) // 2 + 1)
 
-    for band in palette.bands:
-        new_lab = hex_to_lab(band.hex)
-        for old_lab in history_labs:
-            distance = delta_e_cie76(new_lab, old_lab)
-            if distance < MIN_COLOR_DISTANCE:
-                return True
+    for entry in history[-SIMILARITY_WINDOW:]:
+        entry_labs = _safe_labs(_extract_hexes_from_bands(entry.get("bands", "")))
+        if not entry_labs:
+            continue
+        matches = sum(
+            1
+            for new_lab in new_labs
+            if any(
+                delta_e_cie76(new_lab, old_lab) < MIN_COLOR_DISTANCE
+                for old_lab in entry_labs
+            )
+        )
+        if matches >= needed:
+            return True
     return False
 
 
-def is_duplicate_palette(palette: Palette, history: list[dict[str, str]]) -> bool:
+def is_exact_repeat(palette: Palette, history: list[dict[str, str]]) -> bool:
+    """Same fingerprint or same theme as something already published."""
     fingerprint = palette_fingerprint(palette)
     theme = palette.theme.strip().lower()
     for entry in history:
@@ -116,9 +130,11 @@ def is_duplicate_palette(palette: Palette, history: list[dict[str, str]]) -> boo
             return True
         if entry.get("theme", "").strip().lower() == theme:
             return True
-    if is_color_too_similar(palette, history):
-        return True
     return False
+
+
+def is_duplicate_palette(palette: Palette, history: list[dict[str, str]]) -> bool:
+    return is_exact_repeat(palette, history) or is_color_too_similar(palette, history)
 
 
 def record_published_palette(kind: Format, palette: Palette) -> None:
@@ -142,7 +158,7 @@ def format_history_for_prompt(kind: Format, history: list[dict[str, str]]) -> st
         lines.append(f"- {entry.get('theme')} [{entry.get('bands', '')}]\n")
     lines.append("Pick a completely different palette not on this list.\n")
 
-    used_names = get_recent_color_names(history)
+    used_names = get_recent_color_names(history[-SIMILARITY_WINDOW:])
     if used_names:
         sorted_names = sorted(used_names)
         lines.append(
