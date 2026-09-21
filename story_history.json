@@ -35,6 +35,12 @@
       "fingerprint": "fig & pistachio::pistachio|blush|bordeaux::#561c2c|#d6e5c3|#f5d3c8",
       "bands": "pistachio (#D6E5C3), blush (#F5D3C8), bordeaux (#561C2C)",
       "published_at": "2026-09-21T21:27:39.684441+00:00"
+    },
+    {
+      "theme": "Art School Autumn",
+      "fingerprint": "art school autumn::wisteria|matcha|clay::#925345|#b2c5b2|#d1c3de",
+      "bands": "wisteria (#D1C3DE), matcha (#B2C5B2), clay (#925345)",
+      "published_at": "2026-09-21T21:31:42.654088+00:00"
     }
   ]
 }
