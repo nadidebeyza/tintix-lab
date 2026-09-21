@@ -23,6 +23,12 @@
       "fingerprint": "nordic cabin::fog|oat|spruce::#2c423b|#d2dde6|#e6ddd1",
       "bands": "fog (#D2DDE6), oat (#E6DDD1), spruce (#2C423B)",
       "published_at": "2026-09-20T12:12:01.161333+00:00"
+    },
+    {
+      "theme": "Neon Cyberpunk Sunset",
+      "fingerprint": "neon cyberpunk sunset::acid lime|electric orchid|cyber grape::#301934|#ccff00|#e0115f",
+      "bands": "acid lime (#CCFF00), electric orchid (#E0115F), cyber grape (#301934)",
+      "published_at": "2026-09-21T13:49:35.534449+00:00"
     }
   ]
 }
