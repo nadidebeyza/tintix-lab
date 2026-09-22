@@ -41,6 +41,12 @@
       "fingerprint": "art school autumn::wisteria|matcha|clay::#925345|#b2c5b2|#d1c3de",
       "bands": "wisteria (#D1C3DE), matcha (#B2C5B2), clay (#925345)",
       "published_at": "2026-09-21T21:31:42.654088+00:00"
+    },
+    {
+      "theme": "Meadow Muse",
+      "fingerprint": "meadow muse::lilac|nectar|plum::#542840|#d5c3e5|#e8af82",
+      "bands": "lilac (#D5C3E5), nectar (#E8AF82), plum (#542840)",
+      "published_at": "2026-09-22T12:30:09.134365+00:00"
     }
   ]
 }
