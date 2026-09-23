@@ -41,6 +41,12 @@
       "fingerprint": "digital fairycore::lime|mauve|blackberry::#3d2031|#c9a2b8|#cad69b",
       "bands": "lime (#CAD69B), mauve (#C9A2B8), blackberry (#3D2031)",
       "published_at": "2026-09-21T21:31:44.800055+00:00"
+    },
+    {
+      "theme": "Solar Flare Punk",
+      "fingerprint": "solar flare punk::citron|cobalt|obsidian::#111113|#2b4cff|#e0e554",
+      "bands": "citron (#E0E554), cobalt (#2B4CFF), obsidian (#111113)",
+      "published_at": "2026-09-23T18:16:02.625712+00:00"
     }
   ]
 }
