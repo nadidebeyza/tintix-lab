@@ -47,6 +47,12 @@
       "fingerprint": "solar flare punk::citron|cobalt|obsidian::#111113|#2b4cff|#e0e554",
       "bands": "citron (#E0E554), cobalt (#2B4CFF), obsidian (#111113)",
       "published_at": "2026-09-23T18:16:02.625712+00:00"
+    },
+    {
+      "theme": "Neon Cyber Romance",
+      "fingerprint": "neon cyber romance::bubblegum|electric|acid::#70d6ff|#ff70a6|#ffd166",
+      "bands": "bubblegum (#FF70A6), electric (#70D6FF), acid (#FFD166)",
+      "published_at": "2026-09-24T18:12:33.132925+00:00"
     }
   ]
 }
