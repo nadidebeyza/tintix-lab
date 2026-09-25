@@ -59,6 +59,12 @@
       "fingerprint": "medina sunset::terracotta|eucalyptus|indigo::#1e2d4a|#a5c2b6|#d17b5d",
       "bands": "terracotta (#D17B5D), eucalyptus (#A5C2B6), indigo (#1E2D4A)",
       "published_at": "2026-09-24T12:39:25.063983+00:00"
+    },
+    {
+      "theme": "Berry Espresso",
+      "fingerprint": "berry espresso::sorbet|taro|roast::#38231f|#9b7ea9|#e06d8c",
+      "bands": "sorbet (#E06D8C), taro (#9B7EA9), roast (#38231F)",
+      "published_at": "2026-09-25T12:40:52.973557+00:00"
     }
   ]
 }
