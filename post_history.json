@@ -53,6 +53,12 @@
       "fingerprint": "neon cyber romance::bubblegum|electric|acid::#70d6ff|#ff70a6|#ffd166",
       "bands": "bubblegum (#FF70A6), electric (#70D6FF), acid (#FFD166)",
       "published_at": "2026-09-24T18:12:33.132925+00:00"
+    },
+    {
+      "theme": "Midnight Vineyard",
+      "fingerprint": "midnight vineyard::grape|frost|petal::#5d3a65|#a8c0c8|#f4e3e5",
+      "bands": "grape (#5D3A65), frost (#A8C0C8), petal (#F4E3E5)",
+      "published_at": "2026-09-25T18:14:20.883723+00:00"
     }
   ]
 }
