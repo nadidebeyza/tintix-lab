@@ -59,6 +59,12 @@
       "fingerprint": "midnight vineyard::grape|frost|petal::#5d3a65|#a8c0c8|#f4e3e5",
       "bands": "grape (#5D3A65), frost (#A8C0C8), petal (#F4E3E5)",
       "published_at": "2026-09-25T18:14:20.883723+00:00"
+    },
+    {
+      "theme": "Solar Cassette",
+      "fingerprint": "solar cassette::tangerine|teal|butterscotch::#006466|#f4a261|#ff8c42",
+      "bands": "tangerine (#FF8C42), teal (#006466), butterscotch (#F4A261)",
+      "published_at": "2026-09-26T17:37:45.964618+00:00"
     }
   ]
 }
