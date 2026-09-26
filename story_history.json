@@ -65,6 +65,12 @@
       "fingerprint": "berry espresso::sorbet|taro|roast::#38231f|#9b7ea9|#e06d8c",
       "bands": "sorbet (#E06D8C), taro (#9B7EA9), roast (#38231F)",
       "published_at": "2026-09-25T12:40:52.973557+00:00"
+    },
+    {
+      "theme": "Coastal Greenhouse",
+      "fingerprint": "coastal greenhouse::celadon|pomelo|seaweed::#1f3f32|#b3cbb9|#f29e8e",
+      "bands": "celadon (#B3CBB9), pomelo (#F29E8E), seaweed (#1F3F32)",
+      "published_at": "2026-09-26T12:09:28.330369+00:00"
     }
   ]
 }
