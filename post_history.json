@@ -71,6 +71,12 @@
       "fingerprint": "retro velvet sunset::peach|crimson|espresso::#2d1e12|#c84b31|#ffb385",
       "bands": "peach (#FFB385), crimson (#C84B31), espresso (#2D1E12)",
       "published_at": "2026-09-27T18:03:15.351823+00:00"
+    },
+    {
+      "theme": "Rustic Whimsigoth",
+      "fingerprint": "rustic whimsigoth::chamomile|heather|chestnut::#543d2b|#a393b1|#f2e3c6",
+      "bands": "chamomile (#F2E3C6), heather (#A393B1), chestnut (#543D2B)",
+      "published_at": "2026-09-28T20:23:33.248225+00:00"
     }
   ]
 }
