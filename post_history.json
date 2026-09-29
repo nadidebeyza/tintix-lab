@@ -77,6 +77,12 @@
       "fingerprint": "rustic whimsigoth::chamomile|heather|chestnut::#543d2b|#a393b1|#f2e3c6",
       "bands": "chamomile (#F2E3C6), heather (#A393B1), chestnut (#543D2B)",
       "published_at": "2026-09-28T20:23:33.248225+00:00"
+    },
+    {
+      "theme": "Pacific Synth",
+      "fingerprint": "pacific synth::anemone|seafoam|abyss::#242e42|#a3e3d6|#f9a8a8",
+      "bands": "anemone (#F9A8A8), seafoam (#A3E3D6), abyss (#242E42)",
+      "published_at": "2026-09-29T19:07:19.753829+00:00"
     }
   ]
 }
