@@ -77,6 +77,12 @@
       "fingerprint": "apricot picnic::cantaloupe|mint|cedar::#5c4033|#cbe4d6|#f9c59b",
       "bands": "cantaloupe (#F9C59B), mint (#CBE4D6), cedar (#5C4033)",
       "published_at": "2026-09-27T12:55:25.914964+00:00"
+    },
+    {
+      "theme": "Midnight Jazz Club",
+      "fingerprint": "midnight jazz club::absinthe|velvet|champagne::#4d7c5c|#6a2c3e|#f4e4bc",
+      "bands": "absinthe (#4D7C5C), velvet (#6A2C3E), champagne (#F4E4BC)",
+      "published_at": "2026-09-29T13:54:39.869980+00:00"
     }
   ]
 }
