@@ -83,6 +83,12 @@
       "fingerprint": "pacific synth::anemone|seafoam|abyss::#242e42|#a3e3d6|#f9a8a8",
       "bands": "anemone (#F9A8A8), seafoam (#A3E3D6), abyss (#242E42)",
       "published_at": "2026-09-29T19:07:19.753829+00:00"
+    },
+    {
+      "theme": "Urban Sage & Rust",
+      "fingerprint": "urban sage & rust::moss|oat|rust::#5a735e|#b85d33|#eae3d2",
+      "bands": "moss (#5A735E), oat (#EAE3D2), rust (#B85D33)",
+      "published_at": "2026-09-30T18:54:14.629147+00:00"
     }
   ]
 }
