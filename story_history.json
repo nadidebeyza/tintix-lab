@@ -89,6 +89,12 @@
       "fingerprint": "cherry denim::frost|denim|cherry::#5c7c9e|#8c1d2f|#d3e2eb",
       "bands": "frost (#D3E2EB), denim (#5C7C9E), cherry (#8C1D2F)",
       "published_at": "2026-09-30T13:30:41.944322+00:00"
+    },
+    {
+      "theme": "Fjord Haze",
+      "fingerprint": "fjord haze::peach|haze|fjord::#1d3f42|#bac2d1|#fad3c0",
+      "bands": "peach (#FAD3C0), haze (#BAC2D1), fjord (#1D3F42)",
+      "published_at": "2026-10-01T14:21:40.069264+00:00"
     }
   ]
 }
