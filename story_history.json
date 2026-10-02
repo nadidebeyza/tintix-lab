@@ -95,6 +95,12 @@
       "fingerprint": "fjord haze::peach|haze|fjord::#1d3f42|#bac2d1|#fad3c0",
       "bands": "peach (#FAD3C0), haze (#BAC2D1), fjord (#1D3F42)",
       "published_at": "2026-10-01T14:21:40.069264+00:00"
+    },
+    {
+      "theme": "Academia Muse",
+      "fingerprint": "academia muse::linen|cardamom|currant::#4d1a25|#9cb094|#e9e0d2",
+      "bands": "linen (#E9E0D2), cardamom (#9CB094), currant (#4D1A25)",
+      "published_at": "2026-10-02T13:46:29.419478+00:00"
     }
   ]
 }
