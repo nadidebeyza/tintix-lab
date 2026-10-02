@@ -95,6 +95,12 @@
       "fingerprint": "hydrangea lemonade::limoncello|hydrangea|navy::#162b4d|#a4bdde|#f3e196",
       "bands": "limoncello (#F3E196), hydrangea (#A4BDDE), navy (#162B4D)",
       "published_at": "2026-10-01T19:17:47.837725+00:00"
+    },
+    {
+      "theme": "Aquatic Grunge",
+      "fingerprint": "aquatic grunge::periwinkle|wasabi|seaweed::#1e2a22|#b3c5f2|#c5d1a7",
+      "bands": "periwinkle (#B3C5F2), wasabi (#C5D1A7), seaweed (#1E2A22)",
+      "published_at": "2026-10-02T19:04:25.380129+00:00"
     }
   ]
 }
