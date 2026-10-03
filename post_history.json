@@ -101,6 +101,12 @@
       "fingerprint": "aquatic grunge::periwinkle|wasabi|seaweed::#1e2a22|#b3c5f2|#c5d1a7",
       "bands": "periwinkle (#B3C5F2), wasabi (#C5D1A7), seaweed (#1E2A22)",
       "published_at": "2026-10-02T19:04:25.380129+00:00"
+    },
+    {
+      "theme": "Gothic Herbarium",
+      "fingerprint": "gothic herbarium::lilac|cardamom|fig::#4a314d|#a2ab8e|#c6b4d6",
+      "bands": "lilac (#C6B4D6), cardamom (#A2AB8E), fig (#4A314D)",
+      "published_at": "2026-10-03T17:46:22.680716+00:00"
     }
   ]
 }
