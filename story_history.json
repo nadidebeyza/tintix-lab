@@ -101,6 +101,12 @@
       "fingerprint": "academia muse::linen|cardamom|currant::#4d1a25|#9cb094|#e9e0d2",
       "bands": "linen (#E9E0D2), cardamom (#9CB094), currant (#4D1A25)",
       "published_at": "2026-10-02T13:46:29.419478+00:00"
+    },
+    {
+      "theme": "Capri Solstice",
+      "fingerprint": "capri solstice::limonata|hydrangea|cacao::#3d2721|#9bb5dd|#fceaa2",
+      "bands": "limonata (#FCEAA2), hydrangea (#9BB5DD), cacao (#3D2721)",
+      "published_at": "2026-10-03T12:23:06.229006+00:00"
     }
   ]
 }
