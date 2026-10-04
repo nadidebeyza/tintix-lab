@@ -107,6 +107,12 @@
       "fingerprint": "capri solstice::limonata|hydrangea|cacao::#3d2721|#9bb5dd|#fceaa2",
       "bands": "limonata (#FCEAA2), hydrangea (#9BB5DD), cacao (#3D2721)",
       "published_at": "2026-10-03T12:23:06.229006+00:00"
+    },
+    {
+      "theme": "Whimsigoth Dream",
+      "fingerprint": "whimsigoth dream::seasalt|heather|boysenberry::#4c2339|#c2b6c7|#d2e3db",
+      "bands": "seasalt (#D2E3DB), heather (#C2B6C7), boysenberry (#4C2339)",
+      "published_at": "2026-10-04T13:09:01.514042+00:00"
     }
   ]
 }
