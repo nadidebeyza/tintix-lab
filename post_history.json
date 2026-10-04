@@ -107,6 +107,12 @@
       "fingerprint": "gothic herbarium::lilac|cardamom|fig::#4a314d|#a2ab8e|#c6b4d6",
       "bands": "lilac (#C6B4D6), cardamom (#A2AB8E), fig (#4A314D)",
       "published_at": "2026-10-03T17:46:22.680716+00:00"
+    },
+    {
+      "theme": "Botanical Sorbet",
+      "fingerprint": "botanical sorbet::sorbet|eucalyptus|mallard::#1c3f3a|#b8d5c8|#fcae8f",
+      "bands": "sorbet (#FCAE8F), eucalyptus (#B8D5C8), mallard (#1C3F3A)",
+      "published_at": "2026-10-04T17:58:45.772304+00:00"
     }
   ]
 }
