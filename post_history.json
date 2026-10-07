@@ -113,6 +113,12 @@
       "fingerprint": "botanical sorbet::sorbet|eucalyptus|mallard::#1c3f3a|#b8d5c8|#fcae8f",
       "bands": "sorbet (#FCAE8F), eucalyptus (#B8D5C8), mallard (#1C3F3A)",
       "published_at": "2026-10-04T17:58:45.772304+00:00"
+    },
+    {
+      "theme": "Coastal Clay",
+      "fingerprint": "coastal clay::mint tea|clay|indigo::#263750|#b6d8c0|#c77b68",
+      "bands": "mint tea (#B6D8C0), clay (#C77B68), indigo (#263750)",
+      "published_at": "2026-10-07T19:45:53.622963+00:00"
     }
   ]
 }
