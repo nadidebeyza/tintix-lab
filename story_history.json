@@ -125,6 +125,12 @@
       "fingerprint": "neon cyberpunk romance::bubblegum|cyber lime|ultraviolet::#7209b7|#fcf6bd|#ff99c8",
       "bands": "bubblegum (#FF99C8), cyber lime (#FCF6BD), ultraviolet (#7209B7)",
       "published_at": "2026-10-07T14:23:31.020369+00:00"
+    },
+    {
+      "theme": "Wildwood Rose",
+      "fingerprint": "wildwood rose::tulip|olive|hemlock::#1c3124|#9aa082|#e8b0b4",
+      "bands": "tulip (#E8B0B4), olive (#9AA082), hemlock (#1C3124)",
+      "published_at": "2026-10-08T14:30:52.505800+00:00"
     }
   ]
 }
