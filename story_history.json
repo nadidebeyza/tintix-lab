@@ -131,6 +131,12 @@
       "fingerprint": "wildwood rose::tulip|olive|hemlock::#1c3124|#9aa082|#e8b0b4",
       "bands": "tulip (#E8B0B4), olive (#9AA082), hemlock (#1C3124)",
       "published_at": "2026-10-08T14:30:52.505800+00:00"
+    },
+    {
+      "theme": "Greenhouse After Dark",
+      "fingerprint": "greenhouse after dark::sea glass|persimmon|nightshade::#2e2a47|#b7d7d0|#df7a5e",
+      "bands": "sea glass (#B7D7D0), persimmon (#DF7A5E), nightshade (#2E2A47)",
+      "published_at": "2026-10-09T14:16:41.569543+00:00"
     }
   ]
 }
