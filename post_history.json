@@ -125,6 +125,12 @@
       "fingerprint": "whimsigoth twilight::honeydew|thistle|cassis::#4a2235|#9f8fa4|#d2e3d2",
       "bands": "honeydew (#D2E3D2), thistle (#9F8FA4), cassis (#4A2235)",
       "published_at": "2026-10-08T19:41:27.571798+00:00"
+    },
+    {
+      "theme": "Downtown Soda Shop",
+      "fingerprint": "downtown soda shop::custard|denim|black cherry::#591a25|#7b9eb8|#fce5b6",
+      "bands": "custard (#FCE5B6), denim (#7B9EB8), black cherry (#591A25)",
+      "published_at": "2026-10-09T19:16:02.754441+00:00"
     }
   ]
 }
