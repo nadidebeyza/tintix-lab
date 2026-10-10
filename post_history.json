@@ -131,6 +131,12 @@
       "fingerprint": "downtown soda shop::custard|denim|black cherry::#591a25|#7b9eb8|#fce5b6",
       "bands": "custard (#FCE5B6), denim (#7B9EB8), black cherry (#591A25)",
       "published_at": "2026-10-09T19:16:02.754441+00:00"
+    },
+    {
+      "theme": "Modernist Tea Room",
+      "fingerprint": "modernist tea room::marzipan|frosting|damson::#361f2e|#bacddb|#f5e2be",
+      "bands": "marzipan (#F5E2BE), frosting (#BACDDB), damson (#361F2E)",
+      "published_at": "2026-10-10T18:15:22.678085+00:00"
     }
   ]
 }
