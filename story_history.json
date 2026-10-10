@@ -137,6 +137,12 @@
       "fingerprint": "greenhouse after dark::sea glass|persimmon|nightshade::#2e2a47|#b7d7d0|#df7a5e",
       "bands": "sea glass (#B7D7D0), persimmon (#DF7A5E), nightshade (#2E2A47)",
       "published_at": "2026-10-09T14:16:41.569543+00:00"
+    },
+    {
+      "theme": "Eclectic Grandpa",
+      "fingerprint": "eclectic grandpa::saffron|cornflower|oxblood::#541924|#8faadc|#e5a93c",
+      "bands": "saffron (#E5A93C), cornflower (#8FAADC), oxblood (#541924)",
+      "published_at": "2026-10-10T13:34:01.878584+00:00"
     }
   ]
 }
