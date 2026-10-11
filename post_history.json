@@ -137,6 +137,12 @@
       "fingerprint": "modernist tea room::marzipan|frosting|damson::#361f2e|#bacddb|#f5e2be",
       "bands": "marzipan (#F5E2BE), frosting (#BACDDB), damson (#361F2E)",
       "published_at": "2026-10-10T18:15:22.678085+00:00"
+    },
+    {
+      "theme": "Apricot Solarium",
+      "fingerprint": "apricot solarium::apricot|sea glass|walnut::#3a231c|#a1c7b8|#f9c5ac",
+      "bands": "apricot (#F9C5AC), sea glass (#A1C7B8), walnut (#3A231C)",
+      "published_at": "2026-10-11T18:41:01.319260+00:00"
     }
   ]
 }
