@@ -143,6 +143,12 @@
       "fingerprint": "apricot solarium::apricot|sea glass|walnut::#3a231c|#a1c7b8|#f9c5ac",
       "bands": "apricot (#F9C5AC), sea glass (#A1C7B8), walnut (#3A231C)",
       "published_at": "2026-10-11T18:41:01.319260+00:00"
+    },
+    {
+      "theme": "Velvet Greenhouse",
+      "fingerprint": "velvet greenhouse::guava|celadon|mulberry::#3b1c2e|#a0b39c|#f4a295",
+      "bands": "guava (#F4A295), celadon (#A0B39C), mulberry (#3B1C2E)",
+      "published_at": "2026-10-12T21:58:55.432959+00:00"
     }
   ]
 }
