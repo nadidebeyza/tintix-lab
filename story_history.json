@@ -149,6 +149,12 @@
       "fingerprint": "scandi orchard::pear|iris|ganache::#2e1f21|#b8b5e1|#d4df9e",
       "bands": "pear (#D4DF9E), iris (#B8B5E1), ganache (#2E1F21)",
       "published_at": "2026-10-11T13:53:35.681614+00:00"
+    },
+    {
+      "theme": "Sirencore Reverie",
+      "fingerprint": "sirencore reverie::foam|dahlia|marine::#16334a|#ba7993|#dcefea",
+      "bands": "foam (#DCEFEA), dahlia (#BA7993), marine (#16334A)",
+      "published_at": "2026-10-14T12:48:51.682321+00:00"
     }
   ]
 }
