@@ -149,6 +149,12 @@
       "fingerprint": "velvet greenhouse::guava|celadon|mulberry::#3b1c2e|#a0b39c|#f4a295",
       "bands": "guava (#F4A295), celadon (#A0B39C), mulberry (#3B1C2E)",
       "published_at": "2026-10-12T21:58:55.432959+00:00"
+    },
+    {
+      "theme": "Copenhagen Flea Market",
+      "fingerprint": "copenhagen flea market::chambray|lemongrass|cognac::#6e331e|#a2bdd4|#d6de9e",
+      "bands": "chambray (#A2BDD4), lemongrass (#D6DE9E), cognac (#6E331E)",
+      "published_at": "2026-10-15T18:01:33.570488+00:00"
     }
   ]
 }
