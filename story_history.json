@@ -155,6 +155,12 @@
       "fingerprint": "sirencore reverie::foam|dahlia|marine::#16334a|#ba7993|#dcefea",
       "bands": "foam (#DCEFEA), dahlia (#BA7993), marine (#16334A)",
       "published_at": "2026-10-14T12:48:51.682321+00:00"
+    },
+    {
+      "theme": "Velvet Tea Room",
+      "fingerprint": "velvet tea room::wasabi|blossom|cassis::#4a1f2d|#b5ce9b|#f3dae2",
+      "bands": "wasabi (#B5CE9B), blossom (#F3DAE2), cassis (#4A1F2D)",
+      "published_at": "2026-10-16T12:13:16.483631+00:00"
     }
   ]
 }
