@@ -155,6 +155,12 @@
       "fingerprint": "copenhagen flea market::chambray|lemongrass|cognac::#6e331e|#a2bdd4|#d6de9e",
       "bands": "chambray (#A2BDD4), lemongrass (#D6DE9E), cognac (#6E331E)",
       "published_at": "2026-10-15T18:01:33.570488+00:00"
+    },
+    {
+      "theme": "Copenhagen Art School",
+      "fingerprint": "copenhagen art school::wisteria|dijon|petrol::#193d44|#c0b0d5|#d1a153",
+      "bands": "wisteria (#C0B0D5), dijon (#D1A153), petrol (#193D44)",
+      "published_at": "2026-10-17T16:54:10.214061+00:00"
     }
   ]
 }
