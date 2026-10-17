@@ -161,6 +161,12 @@
       "fingerprint": "velvet tea room::wasabi|blossom|cassis::#4a1f2d|#b5ce9b|#f3dae2",
       "bands": "wasabi (#B5CE9B), blossom (#F3DAE2), cassis (#4A1F2D)",
       "published_at": "2026-10-16T12:13:16.483631+00:00"
+    },
+    {
+      "theme": "Tokyo Arcade",
+      "fingerprint": "tokyo arcade::soda|papaya|chicory::#35221b|#a3d3ce|#f5b396",
+      "bands": "soda (#A3D3CE), papaya (#F5B396), chicory (#35221B)",
+      "published_at": "2026-10-17T11:30:46.644694+00:00"
     }
   ]
 }
