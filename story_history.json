@@ -167,6 +167,12 @@
       "fingerprint": "tokyo arcade::soda|papaya|chicory::#35221b|#a3d3ce|#f5b396",
       "bands": "soda (#A3D3CE), papaya (#F5B396), chicory (#35221B)",
       "published_at": "2026-10-17T11:30:46.644694+00:00"
+    },
+    {
+      "theme": "Digital Fairycore",
+      "fingerprint": "digital fairycore::citron|thistle|aubergine::#3b1b38|#b7a6e2|#d9ee85",
+      "bands": "citron (#D9EE85), thistle (#B7A6E2), aubergine (#3B1B38)",
+      "published_at": "2026-10-18T12:03:59.620549+00:00"
     }
   ]
 }
