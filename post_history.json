@@ -161,6 +161,12 @@
       "fingerprint": "copenhagen art school::wisteria|dijon|petrol::#193d44|#c0b0d5|#d1a153",
       "bands": "wisteria (#C0B0D5), dijon (#D1A153), petrol (#193D44)",
       "published_at": "2026-10-17T16:54:10.214061+00:00"
+    },
+    {
+      "theme": "Subversive Prep Archive",
+      "fingerprint": "subversive prep archive::pear|cornflower|mahogany::#4a201b|#8eafd1|#c8d677",
+      "bands": "pear (#C8D677), cornflower (#8EAFD1), mahogany (#4A201B)",
+      "published_at": "2026-10-18T17:05:40.859729+00:00"
     }
   ]
 }
