@@ -173,6 +173,12 @@
       "fingerprint": "digital fairycore::citron|thistle|aubergine::#3b1b38|#b7a6e2|#d9ee85",
       "bands": "citron (#D9EE85), thistle (#B7A6E2), aubergine (#3B1B38)",
       "published_at": "2026-10-18T12:03:59.620549+00:00"
+    },
+    {
+      "theme": "Neon Desert Mirage",
+      "fingerprint": "neon desert mirage::cactus|sand|magenta::#4a7c59|#eed7c5|#ff007f",
+      "bands": "cactus (#4A7C59), sand (#EED7C5), magenta (#FF007F)",
+      "published_at": "2026-10-19T14:31:00.510861+00:00"
     }
   ]
 }
