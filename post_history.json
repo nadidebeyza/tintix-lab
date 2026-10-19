@@ -167,6 +167,12 @@
       "fingerprint": "subversive prep archive::pear|cornflower|mahogany::#4a201b|#8eafd1|#c8d677",
       "bands": "pear (#C8D677), cornflower (#8EAFD1), mahogany (#4A201B)",
       "published_at": "2026-10-18T17:05:40.859729+00:00"
+    },
+    {
+      "theme": "Neon Arcade Nights",
+      "fingerprint": "neon arcade nights::acid lime|hot pink|midnight void::#0f051d|#ccff00|#ff007f",
+      "bands": "acid lime (#CCFF00), hot pink (#FF007F), midnight void (#0F051D)",
+      "published_at": "2026-10-19T19:40:14.354226+00:00"
     }
   ]
 }
